@@ -110,9 +110,7 @@
 		class Client
 		{
 			const API_VERSION = '2.0';
-//			 const API_URL = 'http://photo.api.2gis.ru/2.0/';
-//			const API_URL = 'http://photo.local/2.0/';
-			const API_URL = 'http://tmp.dev/1.php?';
+			const API_URL = 'http://photo.local/2.0/';
 
 			const HTTP_POST = 'POST';
 			const HTTP_GET = 'GET';

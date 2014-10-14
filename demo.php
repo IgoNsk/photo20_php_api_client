@@ -11,13 +11,13 @@
 
 	$collection = new PhotoCollection();
 	$collection
-        ->add( new PhotoItem(100, '/tmp/1.php', [
+        ->add( new PhotoItem(100, '/tmp/1.jpg', [
             'description' => 'Photo 1 description',
         ]) )
-        ->add( new PhotoItem(200, '/tmp/2.php', [
+        ->add( new PhotoItem(200, '/tmp/2.jpg', [
             'description' => 'Photo 2 description',
         ]) )
-        ->add( new PhotoItem(300, '/tmp/1.php', [
+        ->add( new PhotoItem(300, '/tmp/3.jpg', [
             'description' => 'Photo 3 description',
         ]) )
     ;
@@ -29,12 +29,17 @@
         $res = $client->add($collection, $client::OBJECT_TYPE_BRANCH, 100500, $client::ALBUM_CODE_DEFAULT);
     } catch (DGAPIPhotoException $e)
     {
-        $res = false;
         die( $e->getMessage() );
     }
 
     if($res)
     {
-        $r = $client->upload($collection);
-        var_dump($r);
+        try
+        {
+            $r = $client->upload($collection);
+            var_dump($r);
+        } catch (DGAPIPhotoException $e)
+        {
+            die( $e->getMessage() );
+        }
     }
