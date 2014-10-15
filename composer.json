@@ -2,7 +2,7 @@
     "name": "2gis/photo20_php_api_client",
     "description": "2GIS Photo API 2.0 Client",
     "autoload": {
-        "psr-0": { "DG\\API\\Photo": "./" }
+        "psr-4": { "DG\\API\\Photo": "/" }
     },
     "require": {
         "php": ">=5.4.30"
