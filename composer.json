@@ -12,6 +12,5 @@
     ],
     "require": {
         "php": ">=5.4.30"
-    },
-    "minimum-stability": "alpha"
+    }
 }
