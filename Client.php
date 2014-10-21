@@ -19,7 +19,9 @@
 		const OBJECT_TYPE_BRANCH = 'branch';
 		const OBJECT_TYPE_GEO = 'geo';
 
-		const ALBUM_CODE_DEFAULT = 'default';
+		const ALBUM_CODE_COMMON = 'common';
+		const ALBUM_CODE_VIEW = 'view';
+		const ALBUM_CODE_FACILITIES = 'facilities';
 
 		protected $_apiKey;
 		protected $_format;
@@ -84,6 +86,8 @@
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
+
+            var_dump($res);
 
             if($httpCode != 200)
             {
