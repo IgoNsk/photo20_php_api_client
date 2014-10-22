@@ -26,6 +26,7 @@
 		protected $_apiKey;
 		protected $_format;
 		protected $_locale;
+        protected $_onResult;
 
 		public function __construct($apiKey, $format = self::FORMAT_JSON, $locale = self::LOCALE_RU_RU)
 		{
@@ -64,6 +65,16 @@
             return $cmd;
 		}
 
+        protected function onResult($jsonResult, $methodName, $params, $httpMethod)
+        {
+            if($this->_onResult && is_callable($this->_onResult))
+            {
+                return call_user_func_array($this->_onResult, func_get_args());
+            }
+
+            return false;
+        }
+
 		protected function callMethod($methodName, array $params = [], $httpMethod = self::HTTP_POST)
 		{
             $httpCode = 200;
@@ -87,7 +98,7 @@
                 throw new Exception($e->getMessage(), $e->getCode());
             }
 
-            var_dump($res);
+            $this->onResult($res, $methodName, $params, $httpMethod);
 
             if($httpCode != 200)
             {
@@ -136,6 +147,18 @@
 
 			return $params;
 		}
+
+        public function setOnResult($onResult)
+        {
+            $this->_onResult = $onResult;
+
+            return $this;
+        }
+
+        public function getOnResult()
+        {
+            return $this->_onResult;
+        }
 
 		public function add(PhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
 		{
