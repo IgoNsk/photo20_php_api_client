@@ -98,7 +98,7 @@
                 throw new Exception($e->getMessage(), $e->getCode());
             }
 
-            $this->onResult($res, $methodName, $params, $httpMethod);
+            $this->onResult($res, $methodName, $params, $httpMethod, $cmd);
 
             if($httpCode != 200)
             {
@@ -260,6 +260,6 @@
 
             $res = $this->makeRequest('upload', $params, self::HTTP_POST);
 
-            var_dump('!!!', $res);
+            return true;
         }
 	}
