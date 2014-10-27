@@ -123,7 +123,7 @@
 			return $resJson;
 		}
 
-		protected function makeRequest($methodName, array $params, $httpMethod)
+		public function makeRequest($methodName, array $params, $httpMethod)
 		{
             $res = $this->callMethod($methodName, $params, $httpMethod);
 
