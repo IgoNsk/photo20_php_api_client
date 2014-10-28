@@ -1,7 +1,9 @@
 <?php
-	namespace DG\API\Photo;
+	namespace DG\API\Photo\Collection;
 
-	class PhotoCollection
+    use \DG\API\Photo\Item\LocalPhotoItem as PhotoItem;
+
+	class LocalPhotoCollection
 	{
 		protected $_items = [];
 
@@ -10,18 +12,32 @@
 
 		}
 
-		public function add(\DG\API\Photo\PhotoItem $item)
+        /**
+         * @param PhotoItem $item
+         * @return $this
+         */
+		public function add(PhotoItem $item)
 		{
 			$this->_items[$item->getUID()] = $item;
 
             return $this;
 		}
 
+        /**
+         * @return PhotoItem[]
+         */
 		public function getItems()
 		{
 			return $this->_items;
 		}
 
+        /**
+         * @param $uid
+         * @param $id
+         * @param $hash
+         * @param $data
+         * @return bool
+         */
         public function setItemDataByUID($uid, $id, $hash, $data)
         {
             if(!isset($this->_items[$uid]))

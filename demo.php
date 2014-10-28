@@ -5,28 +5,32 @@
 	require __DIR__.'/Client.php';
 
 	use \DG\API\Photo\Client;
-	use \DG\API\Photo\PhotoCollection;
-	use \DG\API\Photo\PhotoItem;
+	use \DG\API\Photo\Collection\LocalPhotoCollection;
+	use \DG\API\Photo\Item\LocalPhotoItem;
     use \DG\API\Photo\Exception as DGAPIPhotoException;
 
-	$collection = new PhotoCollection();
+	$collection = new LocalPhotoCollection();
 	$collection
-        ->add( new PhotoItem(100, '/tmp/1.jpg', [
+        ->add( new LocalPhotoItem(100, '/tmp/1.jpg', [
             'description' => 'Photo 1 description',
         ]) )
-        ->add( new PhotoItem(200, '/tmp/2.jpg', [
+        ->add( new LocalPhotoItem(200, '/tmp/2.jpg', [
             'description' => 'Photo 2 description',
         ]) )
-        ->add( new PhotoItem(300, '/tmp/3.jpg', [
+        ->add( new LocalPhotoItem(300, '/tmp/3.jpg', [
             'description' => 'Photo 3 description',
         ]) )
     ;
 
     $client = new Client('my_cool_key');
 
+    $objectType = $client::OBJECT_TYPE_BRANCH;
+    $objectId = 100500;
+    $albumCode = $client::ALBUM_CODE_DEFAULT;
+
     try
     {
-        $res = $client->add($collection, $client::OBJECT_TYPE_BRANCH, 100500, $client::ALBUM_CODE_DEFAULT);
+        $res = $client->add($collection, $objectType, $objectId, $albumCode);
     } catch (DGAPIPhotoException $e)
     {
         die( $e->getMessage() );
@@ -43,3 +47,13 @@
             die( $e->getMessage() );
         }
     }
+
+    try
+    {
+        $r = $client->get($objectId, $objectType, $albumCode);
+        var_dump($r);
+    } catch (DGAPIPhotoException $e)
+    {
+        die( $e->getMessage() );
+    }
+

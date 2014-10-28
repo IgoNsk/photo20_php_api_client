@@ -1,7 +1,7 @@
 <?php
-	namespace DG\API\Photo;
+	namespace DG\API\Photo\Item;
 
-	class PhotoItem
+	class LocalPhotoItem
 	{
         protected $_id;
         protected $_hash;

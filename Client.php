@@ -1,6 +1,10 @@
 <?php
 	namespace DG\API\Photo;
 
+    use \DG\API\Photo\Item\RemotePhotoItem;
+    use \DG\API\Photo\Collection\LocalPhotoCollection;
+    use \DG\API\Photo\Collection\PhotoAlbumCollection;
+
 	class Client
 	{
 		const API_VERSION = '2.0';
@@ -22,6 +26,7 @@
 		const ALBUM_CODE_COMMON = 'common';
 		const ALBUM_CODE_VIEW = 'view';
 		const ALBUM_CODE_FACILITIES = 'facilities';
+        const ALBUM_CODE_DEFAULT = self::ALBUM_CODE_VIEW;
 
 		protected $_apiKey;
 		protected $_format;
@@ -160,7 +165,54 @@
             return $this->_onResult;
         }
 
-		public function add(PhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
+        /**
+         * @param $objectId
+         * @param $objectType
+         * @param $albumCode
+         * @param null $previewSize
+         * @param null $status
+         * @throws \DG\API\Photo\Exception
+         * @return PhotoAlbumCollection
+         */
+        public function get($objectId, $objectType, $albumCode, $previewSize = null, $status = null)
+        {
+            $params = $this->extendParams([
+                'object_id' => $objectId,
+                'object_type' => $objectType,
+                'album_code' => $albumCode,
+                'preview_size' => $previewSize,
+                'status' => $status,
+            ]);
+
+            $res = $this->makeRequest('get', $params, self::HTTP_GET);
+
+            if (!$res) {
+                throw new Exception('No result');
+            }
+
+            if(!isset($res['meta']['code'])) {
+                throw new Exception('Result code is undefined');
+            }
+
+            if ($res['meta']['code'] != 200 ) {
+                throw new Exception($res['meta']['message']);
+            }
+
+            if(!isset($res['result']))
+            {
+                throw new Exception('No result');
+            }
+
+            $collection = new PhotoAlbumCollection($res['album_code'], $res['album_name']);
+            foreach ($res['items'] as $item) {
+                $itemObj = RemotePhotoItem::createFromAPIResult($item);
+                $collection->add($itemObj);
+            }
+
+            return $collection;
+        }
+
+		public function add(LocalPhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
 		{
 			$params = $this->extendParams([
 				'object_type' => $objectType,
@@ -244,7 +296,7 @@
             return true;
 		}
 
-        public function upload(PhotoCollection &$collection)
+        public function upload(LocalPhotoCollection &$collection)
         {
             $items = $collection->getItems();
 
@@ -255,7 +307,7 @@
                         'id' => $item->getId(),
                         'hash' => $item->getHash(),
                     ];
-                }, $collection->getItems()) ),
+                }, $items) ),
             ]);
 
             $res = $this->makeRequest('upload', $params, self::HTTP_POST);
