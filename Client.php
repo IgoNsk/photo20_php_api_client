@@ -4,6 +4,7 @@
     use \DG\API\Photo\Item\RemotePhotoItem;
     use \DG\API\Photo\Collection\LocalPhotoCollection;
     use \DG\API\Photo\Collection\PhotoAlbumCollection;
+    use \DG\API\Photo\Transport\TransportInterface;
 
 	class Client
 	{
@@ -33,6 +34,11 @@
 		protected $_locale;
         protected $_onResult;
 
+        /**
+         * @var TransportInterface
+         */
+        protected $transport;
+
 		public function __construct($apiKey, $format = self::FORMAT_JSON, $locale = self::LOCALE_RU_RU)
 		{
 			$this->_apiKey = $apiKey;
@@ -40,35 +46,10 @@
 			$this->_locale = $locale;
 		}
 
-		protected function getCurlExecString($methodName, array $params = [], $httpMethod = self::HTTP_POST)
-		{
-			$fx = function($fx, $prefix, $ar) {
-				$res = [];
-
-				foreach($ar as $k => $v)
-				{
-					if(is_array($v))
-					{
-						$r = $fx($fx, ($prefix ? $prefix.'['.$k.']' : $k), $v);
-						foreach($r as $vx)
-						{
-							$res[] = $vx;
-						}
-					}else
-					{
-						$res[] = '--form '.($prefix ? $prefix.'['.$k.']' : $k).'='."'".str_replace(["'", '\\'], ["\\'", '\\\\'], $v)."'";
-					}
-				}
-
-                return $res;
-			};
-
-			$args = $fx($fx, '', $params);
-
-			$cmd = '/usr/bin/curl -s -X '.$httpMethod.' \''.self::API_URL.$methodName.'\' '.implode(' ', $args);
-
-            return $cmd;
-		}
+        public function setTransport(TransportInterface $transport)
+        {
+            $this->transport = $transport;
+        }
 
         protected function onResult($jsonResult, $methodName, $params, $httpMethod)
         {
@@ -86,24 +67,17 @@
 
             try
             {
-                /**
-                 * @DESC php curl cant work with multi-array arguments normally with file attache
-                 */
-                $cmd = $this->getCurlExecString($methodName, $params, $httpMethod);
+                $result = $this->transport->makeRequest($methodName, $params, $httpMethod);
+                $res = $result->result;
 
-                exec($cmd, $res, $returnCode);
-
-                if($returnCode != 0)
-                {
+                if ($result->code != 0) {
                     $httpCode = 500;
                 }
-
-                $res = implode('', $res);
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
 
-            $this->onResult($res, $methodName, $params, $httpMethod, $cmd);
+            $this->onResult($res, $methodName, $params, $httpMethod);
 
             if($httpCode != 200)
             {

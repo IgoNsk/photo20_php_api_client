@@ -8,6 +8,7 @@
 	use \DG\API\Photo\Collection\LocalPhotoCollection;
 	use \DG\API\Photo\Item\LocalPhotoItem;
     use \DG\API\Photo\Exception as DGAPIPhotoException;
+    use DG\API\Photo\Transport\CurlExecTransport;
 
 	$collection = new LocalPhotoCollection();
 	$collection
@@ -23,6 +24,7 @@
     ;
 
     $client = new Client('my_cool_key');
+    $client->setTransport(new CurlExecTransport(Client::API_URL));
 
     $objectType = $client::OBJECT_TYPE_BRANCH;
     $objectId = 100500;
