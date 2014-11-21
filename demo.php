@@ -2,7 +2,7 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', 'On');
 
-	require __DIR__.'/Client.php';
+	require __DIR__.'/src/DGPhotoApiClient/Client.php';
 
 	use \DG\API\Photo\Client;
 	use \DG\API\Photo\Collection\LocalPhotoCollection;
