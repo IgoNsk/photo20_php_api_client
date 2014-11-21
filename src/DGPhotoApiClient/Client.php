@@ -66,7 +66,7 @@
             $httpCode = 200;
 
             try
-            {
+            {   
                 $result = $this->transport->makeRequest($methodName, $params, $httpMethod);
                 $res = $result->result;
 
@@ -94,8 +94,7 @@
 		{
             $resJson = json_decode($response, true);
 
-            if(!$resJson)
-            {
+            if (!$resJson) {
                 throw new Exception('Result is not JSON');
             }
 

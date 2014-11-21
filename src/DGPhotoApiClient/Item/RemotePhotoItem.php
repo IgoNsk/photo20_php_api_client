@@ -8,9 +8,8 @@ use \DG\API\Photo\Item\Copyright\CopyrightFactory;
 class RemotePhotoItem
 {
     const STATUS_BLOCKED  = 'blocked';
-    const STATUS_EDITABLE = 'editable';
+    const STATUS_HIDDEN   = 'hidden';
     const STATUS_ACTIVE   = 'active';
-    const STATUS_ALL      = 'all';
 
     /**
      * @var int
@@ -27,6 +26,10 @@ class RemotePhotoItem
      */
     private $_preview;
 
+    /**
+     * @var string
+     */
+    private $_description;
     /**
      * @var string
      */
@@ -66,13 +69,13 @@ class RemotePhotoItem
     {
         $copyrightData = $result['copyright'];
         $copyright = CopyrightFactory::create($copyrightData['type'], $copyrightData['value'], $copyrightData['url']);
-        return new RemotePhotoItem(
+        return new static(
             $result['id'],
             $result['url'],
             $result['preview_url'],
             $result['description'],
-            $result['status'],
             $result['position'],
+            $result['status'],
             $copyright,
             $result['modification_time'],
             $result['creation_time'],
@@ -80,21 +83,36 @@ class RemotePhotoItem
         );
     }
 
+    /**
+     * @param int $id
+     * @param string $url
+     * @param string $preview
+     * @param int $position
+     * @param string $description
+     * @param string $status
+     * @param AbstractCopyright $copyright
+     * @param int $createdAt
+     * @param int $modificatedAt
+     * @param string $comment
+     */
     public function __construct(
         $id,
         $url,
         $preview,
+        $description,
         $position,
         $status,
         AbstractCopyright $copyright,
         $createdAt,
         $modificatedAt,
-        $comment
+        $comment = null
     )
     {
         $this->_id = $id;
         $this->_url = $url;
         $this->_preview = $preview;
+        $this->_description = $description;
+        $this->_position = $position;
         $this->_status = $status;
         $this->_copyright = $copyright;
         $this->_createdAt = $createdAt;
@@ -115,6 +133,11 @@ class RemotePhotoItem
     public function getPreview()
     {
         return $this->_preview;
+    }
+
+    public function getDescription()
+    {
+        return $this->_description;
     }
 
     public function getPosition()

@@ -18,6 +18,8 @@ class CopyrightFactory
      */
     public static function create($type, $value, $url = null)
     {
+        $type = trim($type);
+        $type = strtolower($type);
         switch ($type) {
             case self::TYPE_IMAGE:
                 return new ImageCopyright($value, $url);

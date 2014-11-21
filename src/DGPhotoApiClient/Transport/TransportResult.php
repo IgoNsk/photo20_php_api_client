@@ -9,7 +9,7 @@ namespace DG\API\Photo\Transport;
 class TransportResult
 {
     /**
-     * @var array
+     * @var string
      */
     public $result;
 
@@ -22,7 +22,7 @@ class TransportResult
      * @param array $result
      * @param $code
      */
-    public function __construct(array $result, $code)
+    public function __construct($result, $code)
     {
         $this->result = $result;
         $this->code = $code;

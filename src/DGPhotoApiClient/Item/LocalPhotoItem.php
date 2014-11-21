@@ -48,6 +48,11 @@
             return $this;
         }
 
+        public function getData()
+        {
+            return $this->_data;
+        }
+
         public function getId()
         {
             return $this->_id;
