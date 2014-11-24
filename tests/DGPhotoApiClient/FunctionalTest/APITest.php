@@ -10,7 +10,15 @@ use DGPhotoApiClient\FunctionalTest\StubTransport as Transport;
 
 class APITest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var array
+     */
     private $config;
+
+    /**
+     * @var \DG\API\Photo\Client
+     */
+    private $client;
 
     public function setUp()
     {
@@ -42,11 +50,9 @@ class APITest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($originData['total'], $album->getCount());
 
             $photoIndex = 0;
-            foreach ($album->getItems() as $photoItem){
+            foreach ($album->getItems() as $photoItem) {
                 $originPhoto = $originData['items'][$photoIndex];
-                /**
-                 * @var $photoItem DG\API\Photo\Item\RemotePhotoItem
-                 */
+
                 $this->assertInstanceOf('DG\\API\\Photo\\Item\\RemotePhotoItem', $photoItem);
                 $this->assertEquals($originPhoto['id'], $photoItem->getId(), 'Id different');
                 $this->assertEquals($originPhoto['url'], $photoItem->getUrl(), 'URL different');

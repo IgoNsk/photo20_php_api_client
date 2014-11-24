@@ -143,7 +143,7 @@
          * @param null $previewSize
          * @param null $status
          * @throws \DG\API\Photo\Exception
-         * @return PhotoAlbumCollection
+         * @return PhotoAlbumCollection[]
          */
         public function get($objectId, $objectType, $albumCode, $previewSize = null, $status = null)
         {

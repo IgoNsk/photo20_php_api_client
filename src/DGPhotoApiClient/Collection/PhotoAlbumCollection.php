@@ -32,6 +32,9 @@ class PhotoAlbumCollection
         return $this;
     }
 
+    /**
+     * @return RemotePhotoItem[]
+     */
     public function getItems()
     {
         return $this->_items;
