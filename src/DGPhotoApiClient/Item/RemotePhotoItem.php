@@ -99,12 +99,12 @@ class RemotePhotoItem
         $id,
         $url,
         $preview,
-        $description,
-        $position,
-        $status,
-        AbstractCopyright $copyright,
-        $createdAt,
-        $modificatedAt,
+        $description = null,
+        $position = null,
+        $status = null,
+        AbstractCopyright $copyright = null,
+        $createdAt = null,
+        $modificatedAt = null,
         $comment = null
     )
     {

@@ -136,6 +136,27 @@
             return $this->_onResult;
         }
 
+        protected function checkApiResponse($res)
+        {
+            if (!$res) {
+                throw new Exception('No result');
+            }
+
+            if (!isset($res['meta']['code'])) {
+                throw new Exception('Result code is undefined');
+            }
+
+            if ($res['meta']['code'] != 200 ) {
+                throw new Exception($res['meta']['message']);
+            }
+
+            if (!isset($res['result'])) {
+                throw new Exception('No result');
+            }
+
+            return $this;
+        }
+
         /**
          * @param $objectId
          * @param $objectType
@@ -157,21 +178,7 @@
 
             $res = $this->makeRequest('get', $params, self::HTTP_GET);
 
-            if (!$res) {
-                throw new Exception('No result');
-            }
-
-            if (!isset($res['meta']['code'])) {
-                throw new Exception('Result code is undefined');
-            }
-
-            if ($res['meta']['code'] != 200 ) {
-                throw new Exception($res['meta']['message']);
-            }
-
-            if (!isset($res['result'])) {
-                throw new Exception('No result');
-            }
+            $this->checkApiResponse($res);
 
             $result = [];
             foreach ($res['result'] as $resultSet) {
@@ -232,6 +239,11 @@
                 throw new Exception('Items are not array');
             }
 
+            $collection->setOptions([
+                'album_code' => $resData['album_code'],
+                'album_name' => $resData['album_name'],
+            ]);
+
             foreach ($resData['items'] as $resItem) {
                 if (isset($resItem['error'])) {
                     /**
@@ -258,7 +270,12 @@
             return true;
 		}
 
-        public function upload(LocalPhotoCollection &$collection)
+        /**
+         * @param LocalPhotoCollection $collection
+         * @return PhotoAlbumCollection
+         * @throws Exception
+         */
+        public function upload(LocalPhotoCollection $collection)
         {
             $items = $collection->getItems();
 
@@ -274,6 +291,27 @@
 
             $res = $this->makeRequest('upload', $params, self::HTTP_POST);
 
-            return true;
+            $this->checkApiResponse($res);
+            $albumData = $collection->getOptions();
+
+            $resCollection = new PhotoAlbumCollection($albumData['album_code'], $albumData['album_name']);
+            foreach ($res['result']['items'] as $resultSet) {
+                if ($resultSet['code'] != '200') {
+                    continue;
+                }
+
+                /**
+                 * @todo перенести из старой коллекции Description
+                 */
+                $resCollection->add(new RemotePhotoItem(
+                    $resultSet['id'],
+                    $resultSet['url'],
+                    $resultSet['preview_url'],
+                    null,
+                    $resultSet['position']
+                ));
+            }
+
+            return $resCollection;
         }
 	}

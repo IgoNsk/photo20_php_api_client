@@ -6,11 +6,31 @@
 	class LocalPhotoCollection
 	{
 		protected $_items = [];
+        private $options = [];
 
 		public function __construct()
 		{
 
 		}
+
+        /**
+         * @param array $options
+         * @return $this
+         */
+        public function setOptions(array $options)
+        {
+            $this->options = $options;
+
+            return $this;
+        }
+
+        /**
+         * @return array
+         */
+        public function getOptions()
+        {
+            return $this->options;
+        }
 
         /**
          * @param PhotoItem $item

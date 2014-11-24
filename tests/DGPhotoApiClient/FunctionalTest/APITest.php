@@ -107,4 +107,29 @@ class APITest extends \PHPUnit_Framework_TestCase
         return $collection;
     }
 
+    /**
+     * @param LocalPhotoCollection $collection
+     * @depends testAddMethod
+     */
+    public function testUploadMethod(LocalPhotoCollection $collection)
+    {
+        $stub = $this->config['upload']['100500'];
+        $this->client->setTransport(new Transport($stub['answer']));
+
+        $result = $this->client->upload($collection);
+        $this->assertCount($result->getCount(), $collection->getItems());
+
+        $originData = json_decode($stub['answer'], true);
+        $photoIndex = 0;
+        foreach ($result->getItems() as $item) {
+            $originPhoto = $originData['result']['items'][$photoIndex];
+
+            $this->assertInstanceOf('DG\\API\\Photo\\Item\\RemotePhotoItem', $item);
+            $this->assertEquals($originPhoto['id'], $item->getId(), "Id different");
+            $this->assertEquals($originPhoto['url'], $item->getUrl(), "Url different");
+            $this->assertEquals($originPhoto['preview_url'], $item->getPreview(), "PreviewUrl different");
+            $this->assertEquals($originPhoto['position'], $item->getPosition(), "Position different");
+            $photoIndex++;
+        }
+    }
 } 

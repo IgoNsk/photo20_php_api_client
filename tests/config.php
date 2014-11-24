@@ -17,5 +17,10 @@ return [
             'albumCode' => DG\API\Photo\Client::ALBUM_CODE_DEFAULT,
             'answer' => '{"meta":{"code":200},"result":{"total":2,"album_code":"common","album_name":"\u0424\u043e\u0442\u043e \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0439","items":[{"id":"140737490882016","uid":"100","hash":"46ece36b6ef0065d8402fade71890b1e0640b70c"},{"id":"140737490882017","uid":"200","hash":"9e80ec73854235c0dacc3d6e85ce4f3ee395c363"}]}}',
         ]
-    ]
+    ],
+    'upload' => [
+        '100500' => [
+            'answer' => '{"meta":{"code":200},"result":{"total":2,"items":[{"id":"140737490882016","code":"200","url":"https:\/\/irs1.4sqi.net\/img\/general\/540x720\/Nauut76bDMd3c6GFNHxLRiJLjkvqxS5l8LxyjiGpmlQ.jpg","preview_url":"https:\/\/irs1.4sqi.net\/img\/general\/100x100\/Nauut76bDMd3c6GFNHxLRiJLjkvqxS5l8LxyjiGpmlQ.jpg","position":"0"},{"id":"140737490882017","code":"200","url":"https:\/\/irs1.4sqi.net\/img\/general\/540x720\/Nauut76bDMd3c6GFNHxLRiJLjkvqsd5l8LxyjiGpmlQ.jpg","preview_url":"https:\/\/irs1.4sqi.net\/img\/general\/100x100\/Nauut76bDMd3c6GFNHxLRiJLjkvqxS5l8LxyjiGpmls.jpg","position":"1"}]}}',
+        ]
+    ],
 ];
