@@ -202,48 +202,38 @@
 
 			$res = $this->makeRequest('add', $params, self::HTTP_POST);
 
-            if(!$res)
-            {
+            if (!$res) {
                 throw new Exception('No result');
             }
 
-            if(!isset($res['meta']['code']) || $res['meta']['code'] != 200 )
-            {
+            if (!isset($res['meta']['code']) || $res['meta']['code'] != 200 ) {
                 /**
                  * @TODO error
                  */
                 throw new Exception('Result code is not 200');
             }
 
-            if(!isset($res['result']))
-            {
+            if (!isset($res['result'])) {
                 throw new Exception('No result');
             }
 
             $result = $res['result'];
-
             $fields = ['total', 'album_code', 'album_name', 'items'];
-
             $resData = [];
 
-            foreach($fields as $field)
-            {
-                if(!isset($result[$field]))
-                {
+            foreach ($fields as $field) {
+                if (!isset($result[$field])) {
                     throw new Exception('No field "'.$field.'" in result');
                 }
                 $resData[$field] = $result[$field];
             }
 
-            if(!is_array($resData['items']))
-            {
+            if (!is_array($resData['items'])) {
                 throw new Exception('Items are not array');
             }
 
-            foreach($resData['items'] as $resItem)
-            {
-                if(isset($resItem['error']))
-                {
+            foreach ($resData['items'] as $resItem) {
+                if (isset($resItem['error'])) {
                     /**
                      * @TODO error
                      */
@@ -257,8 +247,7 @@
 
                 $r = $collection->setItemDataByUID($uid, $id, $hash, $data);
 
-                if(!$r)
-                {
+                if (!$r) {
                     /**
                      * @TODO error
                      */

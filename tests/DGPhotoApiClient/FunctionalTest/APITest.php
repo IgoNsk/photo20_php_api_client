@@ -35,7 +35,7 @@ class APITest extends \PHPUnit_Framework_TestCase
 
     public function testMethodGet()
     {
-        $item = $this->config['items']['100500'];
+        $item = $this->config['get']['100500'];
         $this->client->setTransport(new Transport($item['answer']));
 
         $r = $this->client->get($item['objectId'], $item['objectType'], $item['albumCode']);
@@ -71,6 +71,40 @@ class APITest extends \PHPUnit_Framework_TestCase
                 $photoIndex++;
             }
         }
+    }
+
+    public function testAddMethod()
+    {
+        $stub = $this->config['add']['100500'];
+        $this->client->setTransport(new Transport($stub['answer']));
+
+        $collection = new LocalPhotoCollection();
+        $collection
+            ->add( new LocalPhotoItem(100, '/tmp/1.jpg', [
+                'description' => 'Photo 1 description',
+            ]) )
+            ->add( new LocalPhotoItem(200, '/tmp/2.jpg', [
+                'description' => 'Photo 2 description',
+            ]) )
+        ;
+        $count = count($collection->getItems());
+
+        $this->assertTrue($this->client->add($collection, $stub['objectType'], $stub['objectId'], $stub['albumCode']));
+        $this->assertCount($count, $collection->getItems());
+
+        $originData = json_decode($stub['answer'], true);
+        $photoIndex = 0;
+        foreach ($collection->getItems() as $item) {
+            $originPhoto = $originData['result']['items'][$photoIndex];
+            $this->assertInstanceOf('\\DG\\API\\Photo\\Item\\LocalPhotoItem', $item);
+
+            $this->assertEquals($originPhoto['id'], $item->getId());
+            $this->assertEquals($originPhoto['uid'], $item->getUID());
+            $this->assertEquals($originPhoto['hash'], $item->getHash());
+            $photoIndex++;
+        }
+
+        return $collection;
     }
 
 } 
