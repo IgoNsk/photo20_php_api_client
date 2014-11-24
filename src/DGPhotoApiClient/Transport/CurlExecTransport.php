@@ -52,6 +52,9 @@ class CurlExecTransport implements TransportInterface
         $cmd = $this->getCurlExecString($methodName, $params, $httpMethod);
         exec($cmd, $res, $returnCode);
 
+        if ($returnCode != 0) {
+            return null;
+        }
         $res = implode('', $res);
         $result = new TransportResult($res, $returnCode);
 

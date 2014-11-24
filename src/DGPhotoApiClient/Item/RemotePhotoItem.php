@@ -77,8 +77,8 @@ class RemotePhotoItem
             $result['position'],
             $result['status'],
             $copyright,
-            $result['modification_time'],
             $result['creation_time'],
+            $result['modification_time'],
             $result['comment']
         );
     }

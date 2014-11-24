@@ -66,26 +66,24 @@
             $httpCode = 200;
 
             try
-            {   
+            {
                 $result = $this->transport->makeRequest($methodName, $params, $httpMethod);
-                $res = $result->result;
-
-                if ($result->code != 0) {
+                if (!$result) {
                     $httpCode = 500;
                 }
             } catch (\Exception $e) {
                 throw new Exception($e->getMessage(), $e->getCode());
             }
 
-            $this->onResult($res, $methodName, $params, $httpMethod);
-
-            if($httpCode != 200)
-            {
+            if ($httpCode != 200) {
                 /**
                  * @TODO error
                  */
                 throw new Exception('Result code is not 200');
             }
+
+            $res = $result->result;
+            $this->onResult($res, $methodName, $params, $httpMethod);
 
             return $res;
 		}
@@ -163,7 +161,7 @@
                 throw new Exception('No result');
             }
 
-            if(!isset($res['meta']['code'])) {
+            if (!isset($res['meta']['code'])) {
                 throw new Exception('Result code is undefined');
             }
 
@@ -171,18 +169,20 @@
                 throw new Exception($res['meta']['message']);
             }
 
-            if(!isset($res['result']))
-            {
+            if (!isset($res['result'])) {
                 throw new Exception('No result');
             }
 
-            $collection = new PhotoAlbumCollection($res['album_code'], $res['album_name']);
-            foreach ($res['items'] as $item) {
-                $itemObj = RemotePhotoItem::createFromAPIResult($item);
-                $collection->add($itemObj);
+            $result = [];
+            foreach ($res['result'] as $resultSet) {
+                $result[] = $collection = new PhotoAlbumCollection($resultSet['album_code'], $resultSet['album_name']);
+                foreach ($resultSet['items'] as $item) {
+                    $itemObj = RemotePhotoItem::createFromAPIResult($item);
+                    $collection->add($itemObj);
+                }
             }
 
-            return $collection;
+            return $result;
         }
 
 		public function add(LocalPhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
