@@ -3,7 +3,9 @@
     "description": "2GIS Photo API 2.0 Client",
     "keywords": ["2Gis", "API", "Photo API"],
     "autoload": {
-        "psr-4": { "DG\\API\\Photo\\": "src/DGPhotoApiClient" }
+        "psr-4": {
+            "DG\\API\\Photo\\": ["src/DGPhotoApiClient"]
+        }
     },
     "require": {
         "php": ">=5.4.30"
