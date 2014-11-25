@@ -14,17 +14,35 @@ class TransportResult
     public $result;
 
     /**
-     * @var integer
+     * @var array
      */
-    public $code;
+    private $params;
 
     /**
-     * @param array $result
-     * @param $code
+     * @param $result
+     * @param array $params
      */
-    public function __construct($result, $code)
+    public function __construct($result, array $params = [])
     {
         $this->result = $result;
-        $this->code = $code;
+        $this->setParams($params);
+    }
+
+    /**
+     * @param array $params
+     * @return $this
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 }

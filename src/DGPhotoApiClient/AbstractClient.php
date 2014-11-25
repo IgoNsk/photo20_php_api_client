@@ -38,7 +38,7 @@ abstract class AbstractClient
         $this->transport = $transport;
     }
 
-    protected function onResult($jsonResult, $methodName, $params, $httpMethod)
+    protected function onResult($jsonResult, $methodName, $params, $httpMethod, $result)
     {
         if($this->_onResult && is_callable($this->_onResult))
         {
@@ -70,7 +70,7 @@ abstract class AbstractClient
         }
 
         $res = $result->result;
-        $this->onResult($res, $methodName, $params, $httpMethod);
+        $this->onResult($res, $methodName, $params, $httpMethod, $result->getParams());
 
         return $res;
     }

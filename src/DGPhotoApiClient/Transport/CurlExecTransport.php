@@ -56,7 +56,11 @@ class CurlExecTransport implements TransportInterface
             return null;
         }
         $res = implode('', $res);
-        $result = new TransportResult($res, $returnCode);
+        $result = new TransportResult($res, [
+            'cmd' => $cmd,
+            'res' => $res,
+            'returnCode' => $returnCode
+        ]);
 
         return $result;
     }
