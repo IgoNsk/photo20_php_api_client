@@ -63,7 +63,7 @@
                 'status' => $status,
             ]);
 
-            $res = $this->makeRequest('get', $params, self::HTTP_GET);
+            $res = $this->makeRequest('photo/get', $params, self::HTTP_GET);
 
             $this->checkApiResponse($res);
 
@@ -97,7 +97,7 @@
 				}, $collection->getItems()) ),
 			]);
 
-			$res = $this->makeRequest('add', $params, self::HTTP_POST);
+			$res = $this->makeRequest('photo/add', $params, self::HTTP_POST);
 
             if (!$res) {
                 throw new Exception('No result');
@@ -182,7 +182,7 @@
                 }, $items) ),
             ]);
 
-            $res = $this->makeRequest('upload', $params, self::HTTP_POST);
+            $res = $this->makeRequest('photo/upload', $params, self::HTTP_POST);
 
             $this->checkApiResponse($res);
             $albumData = $collection->getOptions();
