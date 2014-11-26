@@ -114,7 +114,7 @@ abstract class AbstractClient
             }
         }
 
-        return $value;
+        return $result;
     }
 
     public function setOnResult($onResult)
