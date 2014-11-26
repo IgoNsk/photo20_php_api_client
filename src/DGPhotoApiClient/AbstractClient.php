@@ -103,12 +103,18 @@ abstract class AbstractClient
             'locale' => $this->_locale,
         ];
 
-        foreach($fields as $fieldKey)
-        {
+        foreach ($fields as $fieldKey) {
             $params[$fieldKey] = $systemFields[$fieldKey];
         }
 
-        return $params;
+        $result = [];
+        foreach ($params as $paramName=>$value) {
+            if ($value) {
+                $result[$paramName] = $value;
+            }
+        }
+
+        return $value;
     }
 
     public function setOnResult($onResult)
