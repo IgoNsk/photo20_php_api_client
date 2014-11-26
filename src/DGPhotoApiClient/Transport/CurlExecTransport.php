@@ -19,30 +19,42 @@ class CurlExecTransport implements TransportInterface
 
     private function getCurlExecString($methodName, array $params = [], $httpMethod = self::HTTP_POST)
     {
-        $fx = function($fx, $prefix, $ar) {
+        $fx = function($fx, $prefix, $ar) use ($httpMethod) {
             $res = [];
 
-            foreach($ar as $k => $v)
-            {
-                if(is_array($v))
-                {
+            foreach ($ar as $k => $v) {
+                if(is_array($v)) {
                     $r = $fx($fx, ($prefix ? $prefix.'['.$k.']' : $k), $v);
-                    foreach($r as $vx)
-                    {
+                    foreach ($r as $vx) {
                         $res[] = $vx;
                     }
-                }else
-                {
-                    $res[] = '--form '.($prefix ? $prefix.'['.$k.']' : $k).'='."'".str_replace(["'", '\\'], ["\\'", '\\\\'], $v)."'";
+                }
+                else {
+                    switch ($httpMethod){
+                        case self::HTTP_POST:
+                            $paramName = '--form';
+                            break;
+
+                        case self::HTTP_GET:
+                            $paramName = '--data';
+                            break;
+                    }
+                    $res[] = $paramName.' '.($prefix ? $prefix.'['.$k.']' : $k).'='."'".str_replace(["'", '\\'], ["\\'", '\\\\'], $v)."'";
                 }
             }
 
             return $res;
         };
 
-        $args = $fx($fx, '', $params);
+        $cmd = '/usr/bin/curl -s -X '.$httpMethod.' \''.$this->apiUrl.$methodName.'\' ';
 
-        $cmd = '/usr/bin/curl -s -X '.$httpMethod.' \''.$this->apiUrl.$methodName.'\' '.implode(' ', $args);
+
+        if ($httpMethod == self::HTTP_GET) {
+            $cmd .= '--get ';
+        }
+
+        $args = $fx($fx, '', $params);
+        $cmd .= implode(' ', $args);
 
         return $cmd;
     }
