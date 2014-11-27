@@ -34,7 +34,7 @@
             }
 
             if ($res['meta']['code'] != 200 ) {
-                throw new Exception($res['meta']['error']['message']);
+                throw new Exception($res['error']['message']);
             }
 
             if (!isset($res['result'])) {
