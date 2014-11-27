@@ -182,6 +182,11 @@
                 }, $items) ),
             ]);
 
+            $itemsById = array();
+            foreach ($items as $item) {
+                $itemsById[$item->getId()] = $item;
+            }
+
             $res = $this->makeRequest('photo/upload', $params, self::HTTP_POST);
 
             $this->checkApiResponse($res);
@@ -189,20 +194,26 @@
 
             $resCollection = new PhotoAlbumCollection($albumData['album_code'], $albumData['album_name']);
             foreach ($res['result']['items'] as $resultSet) {
+                $localItem = $itemsById[$resultSet['id']];
+
                 if ($resultSet['code'] != '200') {
+                    $localItem->setError($resultSet['error']['type'], $resultSet['error']['message']);
                     continue;
                 }
 
                 /**
                  * @todo перенести из старой коллекции Description
                  */
-                $resCollection->add(new RemotePhotoItem(
+                $newItem = new RemotePhotoItem(
                     $resultSet['id'],
                     $resultSet['url'],
                     $resultSet['preview_url'],
                     null,
                     $resultSet['position']
-                ));
+                );
+
+                $localItem->setRemoteItem($newItem);
+                $resCollection->add($newItem);
             }
 
             return $resCollection;

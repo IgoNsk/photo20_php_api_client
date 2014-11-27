@@ -9,6 +9,12 @@
 		protected $_filePath;
 		protected $_options = [];
 		protected $_data = [];
+        protected $error;
+
+        /**
+         * @var RemotePhotoItem
+         */
+        protected $remoteObject;
 
 		public function __construct($uid, $filePath, array $options = [])
 		{
@@ -46,6 +52,35 @@
             $this->_data = $data;
 
             return $this;
+        }
+
+        public function setError($type, $message)
+        {
+            $this->error = [
+                'message' => $message,
+                'type' => $type
+            ];
+        }
+
+        public function getError()
+        {
+            return $this->error;
+        }
+
+        /**
+         * @param RemotePhotoItem $remoteObject
+         */
+        public function setRemoteItem(RemotePhotoItem $remoteObject)
+        {
+            $this->remoteObject = $remoteObject;
+        }
+
+        /**
+         * @return RemotePhotoItem
+         */
+        public function getRemoteItem()
+        {
+            return $this->remoteObject;
         }
 
         public function getData()
