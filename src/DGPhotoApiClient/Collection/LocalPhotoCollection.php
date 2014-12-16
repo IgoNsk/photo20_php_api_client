@@ -52,6 +52,14 @@
 		}
 
         /**
+         * @return int
+         */
+        public function getCount()
+        {
+            return count($this->_items);
+        }
+
+        /**
          * @param $uid
          * @param $id
          * @param $hash

@@ -182,21 +182,17 @@
                 }, $items) ),
             ]);
 
-            $itemsById = array();
-            foreach ($items as $item) {
-                $itemsById[$item->getId()] = $item;
-            }
-
+            $itemsByIndex = array_values($items);
             $res = $this->makeRequest('photo/upload', $params, self::HTTP_POST);
 
             $this->checkApiResponse($res);
             $albumData = $collection->getOptions();
 
             $resCollection = new PhotoAlbumCollection($albumData['album_code'], $albumData['album_name']);
-            foreach ($res['result']['items'] as $resultSet) {
-                $localItem = $itemsById[$resultSet['id']];
+            foreach ($res['result']['items'] as $index=>$resultSet) {
+                $localItem = $itemsByIndex[$index];
 
-                if ($resultSet['code'] != '200') {
+                if (!empty($resultSet['error'])) {
                     $localItem->setError($resultSet['error']['type'], $resultSet['error']['message']);
                     continue;
                 }
