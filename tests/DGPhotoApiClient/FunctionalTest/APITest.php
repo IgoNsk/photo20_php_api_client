@@ -56,7 +56,7 @@ class APITest extends \PHPUnit_Framework_TestCase
                 $this->assertInstanceOf('DG\\API\\Photo\\Item\\RemotePhotoItem', $photoItem);
                 $this->assertEquals($originPhoto['id'], $photoItem->getId(), 'Id different');
                 $this->assertEquals($originPhoto['url'], $photoItem->getUrl(), 'URL different');
-                $this->assertEquals($originPhoto['preview_url'], $photoItem->getPreview(), 'Preview different');
+                $this->assertEquals($originPhoto['preview_urls'], $photoItem->getPreviews(), 'Preview different');
                 $this->assertEquals($originPhoto['description'], $photoItem->getDescription(), 'Description different');
                 $this->assertEquals($originPhoto['status'], $photoItem->getStatus(), 'Status different');
                 $this->assertEquals($originPhoto['position'], $photoItem->getPosition(), 'Position different');
@@ -127,7 +127,7 @@ class APITest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('DG\\API\\Photo\\Item\\RemotePhotoItem', $item);
             $this->assertEquals($originPhoto['id'], $item->getId(), "Id different");
             $this->assertEquals($originPhoto['url'], $item->getUrl(), "Url different");
-            $this->assertEquals($originPhoto['preview_url'], $item->getPreview(), "PreviewUrl different");
+            $this->assertEquals($originPhoto['preview_urls'], $item->getPreviews(), "PreviewUrl different");
             $this->assertEquals($originPhoto['position'], $item->getPosition(), "Position different");
             $photoIndex++;
         }

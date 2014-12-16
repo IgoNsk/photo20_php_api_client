@@ -13,7 +13,7 @@ class RemotePhotoItemTest extends \PHPUnit_Framework_TestCase
         return [
             'id' =>1,
             'url' => 'dgis.ru/i.jpg',
-            'preview_url' => 'dgis.ru/i_32_32.jpg',
+            'preview_urls' => ['100x100'=>'dgis.ru/i_32_32.jpg'],
             'description' => 'Тестовая фотография',
             'status' => 'active',
             'position' => 2,
@@ -49,7 +49,7 @@ class RemotePhotoItemTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\\DG\\API\\Photo\\Item\\RemotePhotoItem', $item);
         $this->assertEquals($data['id'], $item->getId(), 'Id different');
         $this->assertEquals($data['url'], $item->getUrl(), 'Url different');
-        $this->assertEquals($data['preview_url'], $item->getPreview(), 'Preview different');
+        $this->assertEquals($data['preview_urls'], $item->getPreviews(), 'Preview different');
         $this->assertEquals($data['description'], $item->getDescription(), 'Description different');
         $this->assertEquals($data['status'], $item->getStatus(), 'Status different');
         $this->assertEquals($data['position'], $item->getPosition(), 'Position different');

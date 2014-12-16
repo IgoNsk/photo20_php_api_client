@@ -22,9 +22,9 @@ class RemotePhotoItem
     private $_url;
 
     /**
-     * @var string
+     * @var array
      */
-    private $_preview;
+    private $_previews;
 
     /**
      * @var string
@@ -72,7 +72,7 @@ class RemotePhotoItem
         return new static(
             $result['id'],
             $result['url'],
-            $result['preview_url'],
+            $result['preview_urls'],
             $result['description'],
             $result['position'],
             $result['status'],
@@ -110,7 +110,7 @@ class RemotePhotoItem
     {
         $this->_id = $id;
         $this->_url = $url;
-        $this->_preview = $preview;
+        $this->_previews = $preview;
         $this->_description = $description;
         $this->_position = $position;
         $this->_status = $status;
@@ -130,9 +130,9 @@ class RemotePhotoItem
         return $this->_url;
     }
 
-    public function getPreview()
+    public function getPreviews()
     {
-        return $this->_preview;
+        return $this->_previews;
     }
 
     public function getDescription()

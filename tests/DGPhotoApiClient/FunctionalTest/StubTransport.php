@@ -11,7 +11,11 @@ class StubTransport implements TransportInterface
 
     public function __construct($result, $returnCode = 200)
     {
-        $this->result = new TransportResult($result, $returnCode);
+        $this->result = new TransportResult($result, [
+            'cmd' => null,
+            'res' => $result,
+            'returnCode' => $returnCode
+        ]);
     }
 
     public function makeRequest($methodName, array $params, $httpMethod)
