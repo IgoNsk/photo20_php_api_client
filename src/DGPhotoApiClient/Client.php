@@ -69,6 +69,10 @@ class Client extends AbstractClient
 
         $result = [];
         foreach ($res['result'] as $resultSet) {
+            if (!$resultSet['total']) {
+                continue;
+            }
+
             $result[] = $collection = new PhotoAlbumCollection($resultSet['album_code'], $resultSet['album_name']);
             foreach ($resultSet['items'] as $item) {
                 $itemObj = RemotePhotoItem::createFromAPIResult($item);
