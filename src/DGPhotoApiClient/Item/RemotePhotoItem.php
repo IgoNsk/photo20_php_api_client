@@ -79,7 +79,7 @@ class RemotePhotoItem
             $copyright,
             $result['creation_time'],
             $result['modification_time'],
-            $result['comment']
+            isset($result['comment']) ? $result['comment'] : null
         );
     }
 
