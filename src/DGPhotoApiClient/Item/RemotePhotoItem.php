@@ -60,6 +60,8 @@ class RemotePhotoItem
      */
     private $_comment;
 
+    private $_isChanged = false;
+
     /**
      * Создаем объект фотографии на основании данных JSON переданных из API
      * @param array $result
@@ -169,4 +171,30 @@ class RemotePhotoItem
     {
         return $this->_comment;
     }
-} 
+
+    public function setPosition($position, $changed = true) {
+        $this->_position = $position;
+        if ($changed) {
+            $this->wasChanged();
+        }
+    }
+
+    public function setStatus($status) {
+        $this->_status = $status;
+        $this->wasChanged();
+    }
+
+    public function setDescription($description) {
+        $this->_description= $description;
+        $this->wasChanged();
+    }
+
+    private function wasChanged() {
+        $this->_isChanged = true;
+    }
+
+    public function isChanged() {
+        return $this->_isChanged;
+    }
+
+}

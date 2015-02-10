@@ -33,6 +33,15 @@ class PhotoAlbumCollection
     }
 
     /**
+     * @param array $remotePhotoItems
+     */
+    public function addItems($remotePhotoItems) {
+        foreach ($remotePhotoItems as $item) {
+            $this->add($item);
+        }
+    }
+
+    /**
      * @return RemotePhotoItem[]
      */
     public function getItems()
@@ -43,5 +52,43 @@ class PhotoAlbumCollection
     public function getCount()
     {
         return count($this->getItems());
+    }
+
+    public function isEmpty() {
+        return empty($this->_items);
+    }
+
+    /**
+     * @param string $order = 'asc'|'desc'
+     */
+    public function sortByPosition($order = 'asc') {
+        uasort($this->_items, function ($a, $b) use ($order) {
+            /**
+             * @var \DG\API\Photo\Item\RemotePhotoItem $a
+             * @var \DG\API\Photo\Item\RemotePhotoItem $b
+             */
+            if ($order = 'asc') {
+
+                return $a->getPosition() < $b->getPosition() ? -1 : $a->getPosition() != $b->getPosition();
+            }
+            else {
+                return $a->getPosition() > $b->getPosition() ? -1 : $a->getPosition() != $b->getPosition();
+            }
+        });
+    }
+
+    public function getFirst() {
+        return reset($this->_items);
+    }
+    public function getLast() {
+        return end($this->_items);
+    }
+
+    public function moveFirstToEnd() {
+        $firstItem = $this->getFirst();
+        $lastItem = $this->getLast();
+        $firstItem->setPosition($lastItem->getPosition());
+        $lastItem->setPosition($lastItem->getPosition() + 1, false);
+        $this->sortByPosition();
     }
 }
