@@ -128,4 +128,8 @@ abstract class AbstractClient
     {
         return $this->_onResult;
     }
+
+    public function setApiKey($apiKey) {
+        $this->_apiKey = $apiKey;
+    }
 } 

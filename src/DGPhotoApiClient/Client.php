@@ -30,11 +30,11 @@ class Client extends AbstractClient
         }
 
         if (!isset($res['meta']['code'])) {
-            throw new Exception('Result code is undefined');
+            throw new ClientException('Result code is undefined');
         }
 
         if ($res['meta']['code'] != 200 ) {
-            throw new Exception($res['error']['message']);
+            throw new ClientException($res['error']['message']);
         }
 
         if (!isset($res['result'])) {
@@ -246,40 +246,47 @@ class Client extends AbstractClient
         $items = $collection->getItems();
 
         $requestItems = [];
-        foreach ($items as $item) {
 
-            /**
-             * @var $item \DG\API\Photo\Item\RemotePhotoItem
-             */
+        try {
+            foreach ($items as $item) {
 
-            if ($item->isChanged()) {
-                $requestItems[] = [
-                    'id' => $item->getId(),
-                    'position' => $item->getPosition(),
-                    'status' => $item->getStatus(),
-                    'description' => $item->getDescription(),
-                ];
+                /**
+                 * @var $item \DG\API\Photo\Item\RemotePhotoItem
+                 */
+
+                if ($item->isChanged()) {
+                    $requestItems[] = [
+                        'id' => $item->getId(),
+                        'position' => $item->getPosition(),
+                        'status' => $item->getStatus(),
+                        'description' => $item->getDescription(),
+                    ];
+                }
+            }
+            $params = $this->extendParams([
+                'object_type' => $objectType,
+                'object_id' => $objectId,
+                'album_code' => $albumCode,
+                'photos' => $requestItems,
+            ]);
+
+            $res = $this->makeRequest('photo/update', $params, self::HTTP_POST);
+
+            if (!$res) {
+                throw new Exception('No result');
+            }
+
+            if (!isset($res['meta']['code']) || $res['meta']['code'] != 200 ) {
+                /**
+                 * @TODO error
+                 */
+                throw new ClientException('Result code is not 200');
             }
         }
-        $params = $this->extendParams([
-            'object_type' => $objectType,
-            'object_id' => $objectId,
-            'album_code' => $albumCode,
-            'photos' => $requestItems,
-        ]);
-
-        $res = $this->makeRequest('photo/update', $params, self::HTTP_POST);
-
-        if (!$res) {
-            throw new Exception('No result');
+        catch (ClientException $e) {
+            return false;
         }
 
-        if (!isset($res['meta']['code']) || $res['meta']['code'] != 200 ) {
-            /**
-             * @TODO error
-             */
-            throw new Exception('Result code is not 200');
-        }
 
         return true;
     }

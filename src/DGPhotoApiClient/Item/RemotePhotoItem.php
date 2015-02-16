@@ -86,6 +86,29 @@ class RemotePhotoItem
     }
 
     /**
+     * Костыльный метод для локального создания существующего фото.
+     * @param $id
+     * @param $position
+     * @param $status
+     * @param string $description
+     * @return static
+     */
+    public static function createFromLocalValues($id, $position, $status, $description = '') {
+        return new static(
+            $id,
+            null,
+            null,
+            $description,
+            $position,
+            $status,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
+    /**
      * @param int $id
      * @param string $url
      * @param string $preview
@@ -196,5 +219,12 @@ class RemotePhotoItem
     public function isChanged() {
         return $this->_isChanged;
     }
+
+    public function prepareForAssertion() {
+        $this->_modificatedAt = false;
+        $this->_isChanged = false;
+    }
+
+
 
 }

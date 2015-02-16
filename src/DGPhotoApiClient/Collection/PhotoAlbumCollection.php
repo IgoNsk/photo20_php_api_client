@@ -91,4 +91,22 @@ class PhotoAlbumCollection
         $lastItem->setPosition($lastItem->getPosition() + 1, false);
         $this->sortByPosition();
     }
+
+    protected function removePositionDistances() {
+
+        $this->sortByPosition();
+        /* @var \DG\API\Photo\Item\RemotePhotoItem $item*/
+        foreach ($this->_items as $index => $item) {
+            $item->setPosition($index, false);
+        }
+    }
+
+    public function prepareForAssertion() {
+
+        /* @var \DG\API\Photo\Item\RemotePhotoItem $item*/
+        foreach ($this->_items as $item) {
+            $item->prepareForAssertion();
+        }
+        $this->removePositionDistances();
+    }
 }
