@@ -35,7 +35,7 @@ class PhotoAlbumCollection
     /**
      * @param array $remotePhotoItems
      */
-    public function addItems($remotePhotoItems) {
+    public function addItems(array $remotePhotoItems) {
         foreach ($remotePhotoItems as $item) {
             $this->add($item);
         }
@@ -49,11 +49,17 @@ class PhotoAlbumCollection
         return $this->_items;
     }
 
+    /**
+     * @return int
+     */
     public function getCount()
     {
         return count($this->getItems());
     }
 
+    /**
+     * @return bool
+     */
     public function isEmpty() {
         return empty($this->_items);
     }
@@ -77,11 +83,42 @@ class PhotoAlbumCollection
         });
     }
 
+    /**
+     * @return mixed
+     */
     public function getFirst() {
         return reset($this->_items);
     }
+
+    /**
+     * @return mixed
+     */
     public function getLast() {
         return end($this->_items);
+    }
+
+    /**
+     * @param $position
+     * @return RemotePhotoItem|null
+     */
+    public function getItemByPosition($position) {
+        /* @var \DG\API\Photo\Item\RemotePhotoItem $item*/
+        foreach ($this->_items as $item) {
+            if ($item->getPosition() == $position) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $number
+     * @return mixed|null
+     */
+    public function getItemByNumber($number) {
+        $item = array_slice($this->_items, $number, 1);
+        return !empty($item) ? reset($item) : null;
     }
 
     public function moveFirstToEnd() {
@@ -90,6 +127,41 @@ class PhotoAlbumCollection
         $firstItem->setPosition($lastItem->getPosition());
         $lastItem->setPosition($lastItem->getPosition() + 1, false);
         $this->sortByPosition();
+    }
+
+    public function moveLastToStart() {
+        $lastItem = $this->getLast();
+        $this->incrementPositions(0);
+        $lastItem->setPosition(0);
+        $this->sortByPosition();
+    }
+
+    public function inversePositions() {
+        $newPositions = [];
+        /* @var \DG\API\Photo\Item\RemotePhotoItem $item*/
+        foreach ($this->_items as $item) {
+            $newPositions[$item->getId()] = $item->getPosition();
+        }
+        $this->sortByPosition('desc');
+        foreach ($this->_items as $item) {
+            $item->setPosition($newPositions[$item->getId()]);
+        }
+    }
+
+    /**
+     * @param $incrementPositionStart
+     */
+    public function incrementPositions($incrementPositionStart) {
+
+        $nextPosition = $incrementPositionStart;
+        /* @var \DG\API\Photo\Item\RemotePhotoItem $item*/
+        while (($item = $this->getItemByPosition($nextPosition)) && $this->getLast()->getPosition() >= $nextPosition) {
+            if ($item) {
+                $item->setPosition($nextPosition + 1, false);
+                break;
+            }
+            $nextPosition++;
+        }
     }
 
     protected function removePositionDistances() {

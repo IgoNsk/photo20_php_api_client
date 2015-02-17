@@ -263,6 +263,9 @@ class Client extends AbstractClient
                     ];
                 }
             }
+            if (empty($requestItems)) {
+                return false;
+            }
             $params = $this->extendParams([
                 'object_type' => $objectType,
                 'object_id' => $objectId,
