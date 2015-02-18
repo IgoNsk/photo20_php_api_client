@@ -132,4 +132,16 @@ class APITest extends \PHPUnit_Framework_TestCase
             $photoIndex++;
         }
     }
+
+    /**
+     * @param LocalPhotoCollection $collection
+     * @depends testAddMethod
+     */
+    public function testDeleteMethod(LocalPhotoCollection $collection)
+    {
+        $stub = $this->config['upload']['100500'];
+        $this->client->setTransport(new Transport($stub['answer']));
+
+        print_r($collection->getLast());
+    }
 } 

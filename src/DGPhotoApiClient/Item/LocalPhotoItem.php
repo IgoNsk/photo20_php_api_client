@@ -16,6 +16,11 @@
          */
         protected $remoteObject;
 
+        /**
+         * @var bool
+         */
+        private $_isDeleted = false;
+
 		public function __construct($uid, $filePath, array $options = [])
 		{
 			$this->_uid = $uid;

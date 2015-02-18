@@ -83,6 +83,30 @@ class Client extends AbstractClient
         return $result;
     }
 
+    public function delete(PhotoAlbumCollection $collection, $objectType, $objectId)
+    {
+
+        $items = $collection->getItems();
+
+        $requestItems = [];
+        foreach ($items as $item) {
+            /** @var $item \DG\API\Photo\Item\RemotePhotoItem */
+            if ($item->isDeleted()) {
+                $requestItems[] = $item->getId();
+            }
+        }
+        $params = $this->extendParams([
+            'object_type' => $objectType,
+            'object_id' => $objectId,
+            'id' => $requestItems,
+        ]);
+
+        $res = $this->makeRequest('photo/delete', $params, self::HTTP_POST);
+        $this->checkApiResponse($res);
+
+        return $res;
+    }
+
     public function add(LocalPhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
     {
         $items = $collection->getItems();
@@ -232,4 +256,5 @@ class Client extends AbstractClient
 
         return $resCollection;
     }
+
 }

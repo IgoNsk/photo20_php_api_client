@@ -61,6 +61,11 @@ class RemotePhotoItem
     private $_comment;
 
     /**
+     * @var bool
+     */
+    private $_isDeleted = false;
+
+    /**
      * Создаем объект фотографии на основании данных JSON переданных из API
      * @param array $result
      * @return RemotePhotoItem
@@ -169,4 +174,17 @@ class RemotePhotoItem
     {
         return $this->_comment;
     }
-} 
+
+    public function isDeleted() {
+        return $this->_isDeleted;
+    }
+
+    /**
+     * mark item deleted
+     */
+    public function setDeleted()
+    {
+        $this->_isDeleted = true;
+    }
+
+}

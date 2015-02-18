@@ -81,4 +81,8 @@
 
             return true;
         }
+
+        public function getLast() {
+            return end($this->_items);
+        }
 	}

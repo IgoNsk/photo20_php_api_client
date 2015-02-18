@@ -44,4 +44,8 @@ class PhotoAlbumCollection
     {
         return count($this->getItems());
     }
+
+    public function getLast() {
+        return end($this->_items);
+    }
 }
