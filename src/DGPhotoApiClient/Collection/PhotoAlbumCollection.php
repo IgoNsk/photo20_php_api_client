@@ -3,7 +3,7 @@ namespace DG\API\Photo\Collection;
 
 use \DG\API\Photo\Item\RemotePhotoItem;
 
-class PhotoAlbumCollection extends AlbumCollection
+class PhotoAlbumCollection extends AbstractAlbumCollection
 {
     private $_code;
     private $_name;

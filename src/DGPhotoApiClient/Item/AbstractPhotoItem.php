@@ -8,7 +8,7 @@
 
 namespace DG\API\Photo\Item;
 
-abstract class PhotoItem {
+abstract class AbstractPhotoItem {
 
     protected $_id;
 

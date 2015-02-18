@@ -5,7 +5,7 @@ namespace DG\API\Photo\Item;
 use \DG\API\Photo\Item\Copyright\AbstractCopyright;
 use \DG\API\Photo\Item\Copyright\CopyrightFactory;
 
-class RemotePhotoItem extends PhotoItem
+class RemotePhotoItem extends AbstractPhotoItem
 {
     const STATUS_BLOCKED  = 'blocked';
     const STATUS_HIDDEN   = 'hidden';

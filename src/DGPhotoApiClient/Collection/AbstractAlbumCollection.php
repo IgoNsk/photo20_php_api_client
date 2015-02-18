@@ -8,9 +8,9 @@
 
 namespace DG\API\Photo\Collection;
 
-use DG\API\Photo\Item\PhotoItem as PhotoItem;
+use \DG\API\Photo\Item\AbstractPhotoItem as PhotoItem;
 
-abstract class AlbumCollection {
+abstract class AbstractAlbumCollection {
 
     protected $_items = [];
 
