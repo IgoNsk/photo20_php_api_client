@@ -8,7 +8,6 @@ class LocalPhotoItem extends AbstractPhotoItem
     protected $_filePath;
     protected $_options = [];
     protected $_data = [];
-    protected $error;
 
     /**
      * @var RemotePhotoItem
@@ -52,19 +51,6 @@ class LocalPhotoItem extends AbstractPhotoItem
         $this->_data = $data;
 
         return $this;
-    }
-
-    public function setError($type, $message)
-    {
-        $this->error = [
-            'message' => $message,
-            'type' => $type
-        ];
-    }
-
-    public function getError()
-    {
-        return $this->error;
     }
 
     /**

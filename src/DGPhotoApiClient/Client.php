@@ -330,6 +330,8 @@ class Client extends AbstractClient
         foreach ($res['result']['items'] as $resultSet) {
             if ($resultSet['code'] == 200) {
                 $collection->removeItemByUID($resultSet['id']);
+            } else if (!empty($resultSet['error'])) {
+                $collection->getItemByUID($resultSet['id'])->setError($resultSet['error']['type'], $resultSet['error']['message']);
             }
         }
 

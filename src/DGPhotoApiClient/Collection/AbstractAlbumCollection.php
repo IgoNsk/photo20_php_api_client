@@ -54,6 +54,9 @@ abstract class AbstractAlbumCollection {
         return empty($this->_items);
     }
 
+    /**
+     * @return bool|PhotoItem
+     */
     public function getItemByUID($uid)
     {
         if (!isset($this->_items[$uid])) {

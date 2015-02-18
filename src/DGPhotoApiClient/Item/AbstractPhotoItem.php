@@ -18,6 +18,9 @@ abstract class AbstractPhotoItem {
     /** @var bool */
     protected $_isChanged = false;
 
+    /** @var array */
+    protected $error;
+
     public function getId()
     {
         return $this->_id;
@@ -39,6 +42,19 @@ abstract class AbstractPhotoItem {
     public function isChanged()
     {
         return $this->_isChanged;
+    }
+
+    public function setError($type, $message)
+    {
+        $this->error = [
+            'message' => $message,
+            'type' => $type
+        ];
+    }
+
+    public function getError()
+    {
+        return $this->error;
     }
 
     protected function wasChanged()

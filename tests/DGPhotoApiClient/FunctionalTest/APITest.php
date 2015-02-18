@@ -153,14 +153,16 @@ class APITest extends \PHPUnit_Framework_TestCase
         $delStub['answer']['result']['total'] = 2;
         $delStub['answer']['result']['items'] = [
             ['code' => 200, 'id' => $item1->getId()],
-            ['code' => 200, 'id' => $item2->getId()]
+            ['code' => 400, 'id' => $item2->getId(), 'error' => ['message' => 'Photo not found', 'type' => 'photoNotFound']]
         ];
 
         $this->client->setTransport(new Transport(json_encode($delStub['answer'])));
         $resCollection = $this->client->delete($collection, $delStub['objectType'], $delStub['objectId']);
 
         $this->assertInstanceOf('DG\\API\\Photo\\Collection\\PhotoAlbumCollection', $resCollection);
-        $this->assertEquals($collectionCnt-2, $resCollection->getCount());
+        $this->assertEquals($collectionCnt-1, $resCollection->getCount());
         $this->assertFalse($collection->getItemByUID($item1->getId()));
+        $this->assertArrayHasKey('message', $collection->getItemByUID($item2->getId())->getError());
+        $this->assertEquals('photoNotFound', $collection->getItemByUID($item2->getId())->getError()['type']);
     }
 } 
