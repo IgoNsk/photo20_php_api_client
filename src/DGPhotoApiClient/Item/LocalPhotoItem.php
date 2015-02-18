@@ -1,9 +1,8 @@
 <?php
 	namespace DG\API\Photo\Item;
 
-	class LocalPhotoItem
+	class LocalPhotoItem extends PhotoItem
 	{
-        protected $_id;
         protected $_hash;
 		protected $_uid;
 		protected $_filePath;
@@ -16,12 +15,8 @@
          */
         protected $remoteObject;
 
-        /**
-         * @var bool
-         */
-        private $_isDeleted = false;
 
-		public function __construct($uid, $filePath, array $options = [])
+        public function __construct($uid, $filePath, array $options = [])
 		{
 			$this->_uid = $uid;
 			$this->_filePath = $filePath;
@@ -91,11 +86,6 @@
         public function getData()
         {
             return $this->_data;
-        }
-
-        public function getId()
-        {
-            return $this->_id;
         }
 
         public function getHash()

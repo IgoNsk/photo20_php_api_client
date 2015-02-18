@@ -134,14 +134,33 @@ class APITest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param LocalPhotoCollection $collection
      * @depends testAddMethod
      */
-    public function testDeleteMethod(LocalPhotoCollection $collection)
+    public function testDeleteMethod()
     {
-        $stub = $this->config['upload']['100500'];
-        $this->client->setTransport(new Transport($stub['answer']));
+        $getStub = $this->config['get']['100500'];
+        $this->client->setTransport(new Transport($getStub['answer']));
+        $collection = $this->client->get($getStub['objectId'], $getStub['objectType'], $getStub['albumCode'])[0];
+        $collectionCnt = $collection->getCount();
 
-        print_r($collection->getLast());
+        $delStub = $this->config['delete']['100500'];
+
+        $item1 = $collection->getFirst();
+        $item1->setDeleted();
+        $item2 = $collection->getLast();
+        $item2->setDeleted();
+
+        $delStub['answer']['result']['total'] = 2;
+        $delStub['answer']['result']['items'] = [
+            ['code' => 200, 'id' => $item1->getId()],
+            ['code' => 200, 'id' => $item2->getId()]
+        ];
+
+        $this->client->setTransport(new Transport(json_encode($delStub['answer'])));
+        $resCollection = $this->client->delete($collection, $delStub['objectType'], $delStub['objectId']);
+
+        $this->assertInstanceOf('DG\\API\\Photo\\Collection\\PhotoAlbumCollection', $resCollection);
+        $this->assertEquals($collectionCnt-2, $resCollection->getCount());
+        $this->assertFalse($collection->getItemByUID($item1->getId()));
     }
 } 

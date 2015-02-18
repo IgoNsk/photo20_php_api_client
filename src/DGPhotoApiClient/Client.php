@@ -1,6 +1,7 @@
 <?php
 namespace DG\API\Photo;
 
+use DG\API\Photo\Item\LocalPhotoItem;
 use \DG\API\Photo\Item\RemotePhotoItem;
 use \DG\API\Photo\Collection\LocalPhotoCollection;
 use \DG\API\Photo\Collection\PhotoAlbumCollection;
@@ -21,6 +22,7 @@ class Client extends AbstractClient
     /**
      * @param $res
      * @return $this
+     * @throws ClientException
      * @throws Exception
      */
     protected function checkApiResponse($res)
@@ -81,30 +83,6 @@ class Client extends AbstractClient
         }
 
         return $result;
-    }
-
-    public function delete(PhotoAlbumCollection $collection, $objectType, $objectId)
-    {
-
-        $items = $collection->getItems();
-
-        $requestItems = [];
-        foreach ($items as $item) {
-            /** @var $item \DG\API\Photo\Item\RemotePhotoItem */
-            if ($item->isDeleted()) {
-                $requestItems[] = $item->getId();
-            }
-        }
-        $params = $this->extendParams([
-            'object_type' => $objectType,
-            'object_id' => $objectId,
-            'id' => $requestItems,
-        ]);
-
-        $res = $this->makeRequest('photo/delete', $params, self::HTTP_POST);
-        $this->checkApiResponse($res);
-
-        return $res;
     }
 
     public function add(LocalPhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
@@ -317,4 +295,45 @@ class Client extends AbstractClient
 
         return true;
     }
+
+    /**
+     * @param PhotoAlbumCollection $collection
+     * @param $objectType
+     * @param $objectId
+     * @return mixed
+     * @throws ClientException
+     * @throws Exception
+     */
+    public function delete(PhotoAlbumCollection $collection, $objectType, $objectId)
+    {
+        $items = $collection->getItems();
+
+        $requestItems = [];
+        foreach ($items as $item) {
+            /** @var $item \DG\API\Photo\Item\RemotePhotoItem */
+            if ($item->isDeleted()) {
+                $requestItems[] = $item->getId();
+            }
+        }
+        $params = $this->extendParams([
+            'object_type' => $objectType,
+            'object_id' => $objectId,
+            'id' => $requestItems,
+        ]);
+
+
+        $res = $this->makeRequest('photo/delete', $params, self::HTTP_POST);
+
+        $this->checkApiResponse($res);
+
+
+        foreach ($res['result']['items'] as $resultSet) {
+            if ($resultSet['code'] == 200) {
+                $collection->removeItemByUID($resultSet['id']);
+            }
+        }
+
+        return $collection;
+    }
+
 }

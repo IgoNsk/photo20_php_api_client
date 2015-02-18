@@ -3,15 +3,9 @@
 
     use \DG\API\Photo\Item\LocalPhotoItem as PhotoItem;
 
-	class LocalPhotoCollection
+	class LocalPhotoCollection extends AlbumCollection
 	{
-		protected $_items = [];
         private $options = [];
-
-		public function __construct()
-		{
-
-		}
 
         /**
          * @param array $options
@@ -43,21 +37,6 @@
             return $this;
 		}
 
-        /**
-         * @return PhotoItem[]
-         */
-		public function getItems()
-		{
-			return $this->_items;
-		}
-
-        /**
-         * @return int
-         */
-        public function getCount()
-        {
-            return count($this->_items);
-        }
 
         /**
          * @param $uid
@@ -82,7 +61,4 @@
             return true;
         }
 
-        public function getLast() {
-            return end($this->_items);
-        }
-	}
+    }

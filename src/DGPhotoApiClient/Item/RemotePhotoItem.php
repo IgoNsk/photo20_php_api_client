@@ -5,16 +5,11 @@ namespace DG\API\Photo\Item;
 use \DG\API\Photo\Item\Copyright\AbstractCopyright;
 use \DG\API\Photo\Item\Copyright\CopyrightFactory;
 
-class RemotePhotoItem
+class RemotePhotoItem extends PhotoItem
 {
     const STATUS_BLOCKED  = 'blocked';
     const STATUS_HIDDEN   = 'hidden';
     const STATUS_ACTIVE   = 'active';
-
-    /**
-     * @var int
-     */
-    private $_id;
 
     /**
      * @var string
@@ -59,13 +54,6 @@ class RemotePhotoItem
      * @var string
      */
     private $_comment;
-
-    private $_isChanged = false;
-
-    /**
-     * @var bool
-     */
-    private $_isDeleted = false;
 
     /**
      * Создаем объект фотографии на основании данных JSON переданных из API
@@ -150,11 +138,6 @@ class RemotePhotoItem
         $this->_comment = $comment;
     }
 
-    public function getId()
-    {
-        return $this->_id;
-    }
-
     public function getUrl()
     {
         return $this->_url;
@@ -200,18 +183,6 @@ class RemotePhotoItem
         return $this->_comment;
     }
 
-    public function isDeleted() {
-        return $this->_isDeleted;
-    }
-
-    /**
-     * mark item deleted
-     */
-    public function setDeleted()
-    {
-        $this->_isDeleted = true;
-    }
-
     public function setPosition($position, $changed = true) {
         $this->_position = $position;
         if ($changed) {
@@ -227,14 +198,6 @@ class RemotePhotoItem
     public function setDescription($description) {
         $this->_description= $description;
         $this->wasChanged();
-    }
-
-    private function wasChanged() {
-        $this->_isChanged = true;
-    }
-
-    public function isChanged() {
-        return $this->_isChanged;
     }
 
     public function prepareForAssertion() {
