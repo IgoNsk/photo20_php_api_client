@@ -195,6 +195,11 @@ class RemotePhotoItem
         return $this->_comment;
     }
 
+    public function setId($id) {
+        $this->_id = $id;
+        $this->wasChanged();
+    }
+
     public function setPosition($position, $changed = true) {
         $this->_position = $position;
         if ($changed) {
