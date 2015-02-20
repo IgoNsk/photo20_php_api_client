@@ -307,7 +307,6 @@ class Client extends AbstractClient
     public function delete(PhotoAlbumCollection $collection, $objectType, $objectId)
     {
         $items = $collection->getItems();
-
         $requestItems = [];
         foreach ($items as $item) {
             /** @var $item \DG\API\Photo\Item\RemotePhotoItem */
@@ -318,7 +317,7 @@ class Client extends AbstractClient
         $params = $this->extendParams([
             'object_type' => $objectType,
             'object_id' => $objectId,
-            'id' => $requestItems,
+            'id' => implode(',', $requestItems),
         ]);
 
 
