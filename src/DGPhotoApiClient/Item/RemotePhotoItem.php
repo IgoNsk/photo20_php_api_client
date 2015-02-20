@@ -68,7 +68,7 @@ class RemotePhotoItem
     public static function createFromAPIResult(array $result)
     {
         $copyrightData = $result['copyright'];
-        $copyright = CopyrightFactory::create($copyrightData['type'], $copyrightData['value'], $copyrightData['url']);
+        $copyright = CopyrightFactory::create($copyrightData['type'], $copyrightData['code'], $copyrightData['value'], $copyrightData['url']);
         return new static(
             $result['id'],
             $result['url'],
