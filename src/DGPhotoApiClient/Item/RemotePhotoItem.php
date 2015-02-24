@@ -60,6 +60,8 @@ class RemotePhotoItem
      */
     private $_comment;
 
+    private $_isChanged = false;
+
     /**
      * Создаем объект фотографии на основании данных JSON переданных из API
      * @param array $result
@@ -80,6 +82,29 @@ class RemotePhotoItem
             $result['creation_time'],
             $result['modification_time'],
             isset($result['comment']) ? $result['comment'] : null
+        );
+    }
+
+    /**
+     * Костыльный метод для локального создания существующего фото.
+     * @param $id
+     * @param $position
+     * @param $status
+     * @param string $description
+     * @return static
+     */
+    public static function createFromLocalValues($id, $position, $status, $description = '') {
+        return new static(
+            $id,
+            null,
+            null,
+            $description,
+            $position,
+            $status,
+            null,
+            null,
+            null,
+            null
         );
     }
 
@@ -169,4 +194,42 @@ class RemotePhotoItem
     {
         return $this->_comment;
     }
-} 
+
+    public function setId($id) {
+        $this->_id = $id;
+        $this->wasChanged();
+    }
+
+    public function setPosition($position, $changed = true) {
+        $this->_position = $position;
+        if ($changed) {
+            $this->wasChanged();
+        }
+    }
+
+    public function setStatus($status) {
+        $this->_status = $status;
+        $this->wasChanged();
+    }
+
+    public function setDescription($description) {
+        $this->_description= $description;
+        $this->wasChanged();
+    }
+
+    private function wasChanged() {
+        $this->_isChanged = true;
+    }
+
+    public function isChanged() {
+        return $this->_isChanged;
+    }
+
+    public function prepareForAssertion() {
+        $this->_modificatedAt = false;
+        $this->_isChanged = false;
+    }
+
+
+
+}

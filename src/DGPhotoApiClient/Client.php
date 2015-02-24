@@ -30,11 +30,11 @@ class Client extends AbstractClient
         }
 
         if (!isset($res['meta']['code'])) {
-            throw new Exception('Result code is undefined');
+            throw new ClientException('Result code is undefined');
         }
 
         if ($res['meta']['code'] != 200 ) {
-            throw new Exception($res['error']['message']);
+            throw new ClientException($res['error']['message']);
         }
 
         if (!isset($res['result'])) {
@@ -231,5 +231,66 @@ class Client extends AbstractClient
         }
 
         return $resCollection;
+    }
+
+    /**
+     * @param PhotoAlbumCollection $collection
+     * @param string $objectType
+     * @param int $objectId
+     * @param int $albumCode
+     * @return array|bool
+     * @throws Exception
+     */
+    public function update(PhotoAlbumCollection $collection, $objectType, $objectId, $albumCode)
+    {
+        $items = $collection->getItems();
+
+        $requestItems = [];
+
+        try {
+            foreach ($items as $item) {
+
+                /**
+                 * @var $item \DG\API\Photo\Item\RemotePhotoItem
+                 */
+
+                if ($item->isChanged()) {
+                    $requestItems[] = [
+                        'id' => $item->getId(),
+                        'position' => $item->getPosition(),
+                        'status' => $item->getStatus(),
+                        'description' => $item->getDescription(),
+                    ];
+                }
+            }
+            if (empty($requestItems)) {
+                return false;
+            }
+            $params = $this->extendParams([
+                'object_type' => $objectType,
+                'object_id' => $objectId,
+                'album_code' => $albumCode,
+                'photos' => $requestItems,
+            ]);
+
+            $res = $this->makeRequest('photo/update', $params, self::HTTP_POST);
+
+            if (!$res) {
+                throw new Exception('No result');
+            }
+
+            if (!isset($res['meta']['code']) || $res['meta']['code'] != 200 ) {
+                /**
+                 * @TODO error
+                 */
+                throw new ClientException('Result code is not 200');
+            }
+        }
+        catch (ClientException $e) {
+            return false;
+        }
+
+
+        return $res;
     }
 }
