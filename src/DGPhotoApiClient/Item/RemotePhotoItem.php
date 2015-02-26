@@ -63,7 +63,7 @@ class RemotePhotoItem extends AbstractPhotoItem
     public static function createFromAPIResult(array $result)
     {
         $copyrightData = $result['copyright'];
-        $copyright = CopyrightFactory::create($copyrightData['type'], $copyrightData['value'], $copyrightData['url']);
+        $copyright = CopyrightFactory::create($copyrightData['type'], $copyrightData['code'], $copyrightData['value'], $copyrightData['url']);
         return new static(
             $result['id'],
             $result['url'],
@@ -181,6 +181,11 @@ class RemotePhotoItem extends AbstractPhotoItem
     public function getComment()
     {
         return $this->_comment;
+    }
+
+    public function setId($id) {
+        $this->_id = $id;
+        $this->wasChanged();
     }
 
     public function setPosition($position, $changed = true) {

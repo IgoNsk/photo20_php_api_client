@@ -76,7 +76,7 @@ class PhotoAlbumCollection extends AbstractAlbumCollection
 
     /**
      * @param $number
-     * @return mixed|null
+     * @return RemotePhotoItem|null
      */
     public function getItemByNumber($number) {
         $item = array_slice($this->_items, $number, 1);

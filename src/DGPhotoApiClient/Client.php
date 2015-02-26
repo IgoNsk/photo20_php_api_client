@@ -240,7 +240,7 @@ class Client extends AbstractClient
      * @param string $objectType
      * @param int $objectId
      * @param int $albumCode
-     * @return bool
+     * @return array|bool
      * @throws Exception
      */
     public function update(PhotoAlbumCollection $collection, $objectType, $objectId, $albumCode)
@@ -293,7 +293,7 @@ class Client extends AbstractClient
         }
 
 
-        return true;
+        return $res;
     }
 
     /**

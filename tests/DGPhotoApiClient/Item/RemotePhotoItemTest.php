@@ -19,6 +19,7 @@ class RemotePhotoItemTest extends \PHPUnit_Framework_TestCase
             'position' => 2,
             'copyright' => [
                 'type' => 'text',
+                'code' => 'foursquare',
                 'value' => 'Copyright by 2GIS',
                 'url' => 'http://2gis.com/'
             ],
@@ -70,6 +71,7 @@ class RemotePhotoItemTest extends \PHPUnit_Framework_TestCase
         $copyright = $item->getCopyright();
 
         $this->assertInstanceOf('\\DG\\API\\Photo\\Item\\Copyright\\TextCopyright', $copyright);
+        $this->assertEquals($data['copyright']['code'], $copyright->getCode());
         $this->assertEquals($data['copyright']['value'], $copyright->getValue());
         $this->assertEquals($data['copyright']['url'], $copyright->getUrl());
     }
