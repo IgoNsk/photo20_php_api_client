@@ -3,9 +3,8 @@ namespace DG\API\Photo\Collection;
 
 use \DG\API\Photo\Item\RemotePhotoItem;
 
-class PhotoAlbumCollection
+class PhotoAlbumCollection extends AbstractAlbumCollection
 {
-    private $_items = [];
     private $_code;
     private $_name;
 
@@ -42,29 +41,6 @@ class PhotoAlbumCollection
     }
 
     /**
-     * @return RemotePhotoItem[]
-     */
-    public function getItems()
-    {
-        return $this->_items;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCount()
-    {
-        return count($this->getItems());
-    }
-
-    /**
-     * @return bool
-     */
-    public function isEmpty() {
-        return empty($this->_items);
-    }
-
-    /**
      * @param string $order = 'asc'|'desc'
      */
     public function sortByPosition($order = 'asc') {
@@ -81,20 +57,6 @@ class PhotoAlbumCollection
                 return $a->getPosition() > $b->getPosition() ? -1 : $a->getPosition() != $b->getPosition();
             }
         });
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFirst() {
-        return reset($this->_items);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLast() {
-        return end($this->_items);
     }
 
     /**
@@ -181,4 +143,14 @@ class PhotoAlbumCollection
         }
         $this->removePositionDistances();
     }
+
+    public function removeItemByUID($uid)
+    {
+        if (!isset($this->_items[$uid])) {
+            return false;
+        }
+
+        unset ($this->_items[$uid]);
+    }
+
 }

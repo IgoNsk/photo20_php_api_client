@@ -5,16 +5,11 @@ namespace DG\API\Photo\Item;
 use \DG\API\Photo\Item\Copyright\AbstractCopyright;
 use \DG\API\Photo\Item\Copyright\CopyrightFactory;
 
-class RemotePhotoItem
+class RemotePhotoItem extends AbstractPhotoItem
 {
     const STATUS_BLOCKED  = 'blocked';
     const STATUS_HIDDEN   = 'hidden';
     const STATUS_ACTIVE   = 'active';
-
-    /**
-     * @var int
-     */
-    private $_id;
 
     /**
      * @var string
@@ -59,8 +54,6 @@ class RemotePhotoItem
      * @var string
      */
     private $_comment;
-
-    private $_isChanged = false;
 
     /**
      * Создаем объект фотографии на основании данных JSON переданных из API
@@ -145,11 +138,6 @@ class RemotePhotoItem
         $this->_comment = $comment;
     }
 
-    public function getId()
-    {
-        return $this->_id;
-    }
-
     public function getUrl()
     {
         return $this->_url;
@@ -217,19 +205,9 @@ class RemotePhotoItem
         $this->wasChanged();
     }
 
-    private function wasChanged() {
-        $this->_isChanged = true;
-    }
-
-    public function isChanged() {
-        return $this->_isChanged;
-    }
-
     public function prepareForAssertion() {
         $this->_modificatedAt = false;
         $this->_isChanged = false;
     }
-
-
 
 }
