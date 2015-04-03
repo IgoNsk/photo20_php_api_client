@@ -12,6 +12,7 @@ class Client extends AbstractClient
 
     const OBJECT_TYPE_BRANCH = 'branch';
     const OBJECT_TYPE_GEO = 'geo';
+    const OBJECT_TYPE_ORG = 'org';
 
     const ALBUM_CODE_COMMON = 'common';
     const ALBUM_CODE_VIEW = 'view';
@@ -231,5 +232,27 @@ class Client extends AbstractClient
         }
 
         return $resCollection;
+    }
+
+    /**
+     * @param string $objectType
+     * @param int    $objectId
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function getStatistic($objectType, $objectId)
+    {
+        $params = $this->extendParams([
+            'object_id' => $objectId,
+            'object_type' => $objectType,
+        ]);
+
+        $res = $this->makeRequest('statistic/get', $params, self::HTTP_GET);
+
+        $this->checkApiResponse($res);
+
+        $result = $res['result'];
+        return $result;
     }
 }
