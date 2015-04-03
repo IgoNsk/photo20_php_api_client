@@ -23,4 +23,11 @@ return [
             'answer' => '{"meta":{"code":200},"result":{"total":2,"items":[{"id":"140737490882016","code":"200","url":"https:\/\/irs1.4sqi.net\/img\/general\/540x720\/Nauut76bDMd3c6GFNHxLRiJLjkvqxS5l8LxyjiGpmlQ.jpg","preview_urls":{"100x100":"https:\/\/irs1.4sqi.net\/img\/general\/100x100\/Nauut76bDMd3c6GFNHxLRiJLjkvqxS5l8LxyjiGpmlQ.jpg"},"position":"0"},{"id":"140737490882017","code":"200","url":"https:\/\/irs1.4sqi.net\/img\/general\/540x720\/Nauut76bDMd3c6GFNHxLRiJLjkvqsd5l8LxyjiGpmlQ.jpg","preview_urls":{"100x100":"https:\/\/irs1.4sqi.net\/img\/general\/100x100\/Nauut76bDMd3c6GFNHxLRiJLjkvqxS5l8LxyjiGpmls.jpg"},"position":"1"}]}}',
         ]
     ],
+    'delete' => [
+        '100500' => [
+            'objectId' => 100500,
+            'objectType' => DG\API\Photo\Client::OBJECT_TYPE_BRANCH,
+            'answer' => ['meta' => ['code'=>200], 'result' => ['items' => [], 'total' => 0]],
+        ]
+    ],
 ];

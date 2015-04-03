@@ -5,16 +5,11 @@ namespace DG\API\Photo\Item;
 use \DG\API\Photo\Item\Copyright\AbstractCopyright;
 use \DG\API\Photo\Item\Copyright\CopyrightFactory;
 
-class RemotePhotoItem
+class RemotePhotoItem extends AbstractPhotoItem
 {
     const STATUS_BLOCKED  = 'blocked';
     const STATUS_HIDDEN   = 'hidden';
     const STATUS_ACTIVE   = 'active';
-
-    /**
-     * @var int
-     */
-    private $_id;
 
     /**
      * @var string
@@ -84,6 +79,29 @@ class RemotePhotoItem
     }
 
     /**
+     * Костыльный метод для локального создания существующего фото.
+     * @param $id
+     * @param $position
+     * @param $status
+     * @param string $description
+     * @return static
+     */
+    public static function createFromLocalValues($id, $position, $status, $description = '') {
+        return new static(
+            $id,
+            null,
+            null,
+            $description,
+            $position,
+            $status,
+            null,
+            null,
+            null,
+            null
+        );
+    }
+
+    /**
      * @param int $id
      * @param string $url
      * @param string $preview
@@ -118,11 +136,6 @@ class RemotePhotoItem
         $this->_createdAt = $createdAt;
         $this->_modificatedAt = $modificatedAt;
         $this->_comment = $comment;
-    }
-
-    public function getId()
-    {
-        return $this->_id;
     }
 
     public function getUrl()
@@ -169,4 +182,32 @@ class RemotePhotoItem
     {
         return $this->_comment;
     }
-} 
+
+    public function setId($id) {
+        $this->_id = $id;
+        $this->wasChanged();
+    }
+
+    public function setPosition($position, $changed = true) {
+        $this->_position = $position;
+        if ($changed) {
+            $this->wasChanged();
+        }
+    }
+
+    public function setStatus($status) {
+        $this->_status = $status;
+        $this->wasChanged();
+    }
+
+    public function setDescription($description) {
+        $this->_description= $description;
+        $this->wasChanged();
+    }
+
+    public function prepareForAssertion() {
+        $this->_modificatedAt = false;
+        $this->_isChanged = false;
+    }
+
+}
