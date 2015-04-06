@@ -239,15 +239,17 @@ class Client extends AbstractClient
     /**
      * @param string $objectType
      * @param int    $objectId
+     * @param string $fromDate
      *
      * @return mixed
      * @throws Exception
      */
-    public function getStatistic($objectType, $objectId)
+    public function getStatistic($objectType, $objectId, $fromDate = null)
     {
         $params = $this->extendParams([
             'object_id' => $objectId,
             'object_type' => $objectType,
+            'from'=>$fromDate,
         ]);
 
         $res = $this->makeRequest('statistic/get', $params, self::HTTP_GET);
