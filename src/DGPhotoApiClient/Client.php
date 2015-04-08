@@ -249,7 +249,7 @@ class Client extends AbstractClient
         $params = $this->extendParams([
             'object_id' => $objectId,
             'object_type' => $objectType,
-            'from'=>$fromDate,
+            'from'=>urlencode($fromDate),
         ]);
 
         $res = $this->makeRequest('statistic/get', $params, self::HTTP_GET);
