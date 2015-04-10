@@ -60,6 +60,13 @@ class PhotoAlbumCollection extends AbstractAlbumCollection
     }
 
     /**
+     * @param callable $filterFunction
+     */
+    public function filter(callable $filterFunction) {
+        $this->_items = array_filter($this->_items, $filterFunction);
+    }
+
+    /**
      * @param $position
      * @return RemotePhotoItem|null
      */
