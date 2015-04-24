@@ -8,18 +8,22 @@
 
 namespace DG\API\Photo\Item;
 
-abstract class AbstractPhotoItem {
-
+abstract class AbstractPhotoItem
+{
+    /** @var int */
     protected $_id;
 
     /** @var bool */
     protected $_isDeleted = false;
 
     /** @var bool */
-    protected $_isChanged = false;
+    private $_isChanged = false;
 
     /** @var array */
     protected $error;
+
+    /** @var array */
+    private $_changedFields = [];
 
     public function getId()
     {
@@ -57,8 +61,23 @@ abstract class AbstractPhotoItem {
         return $this->error;
     }
 
-    protected function wasChanged()
+    protected function wasChanged($fieldName = null)
     {
         $this->_isChanged = true;
+
+        if ($fieldName !== null) {
+            $this->_changedFields[] = $fieldName;
+        }
+    }
+
+    public function isChangedField($fieldName)
+    {
+        return in_array($fieldName, $this->_changedFields);
+    }
+
+    public function flushChanged()
+    {
+        $this->_isChanged = false;
+        $this->_changedFields = [];
     }
 }

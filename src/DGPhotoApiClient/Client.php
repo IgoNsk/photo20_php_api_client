@@ -271,7 +271,6 @@ class Client extends AbstractClient
     public function update(PhotoAlbumCollection $collection, $objectType, $objectId, $albumCode)
     {
         $items = $collection->getItems();
-
         $requestItems = [];
 
         try {
@@ -282,12 +281,26 @@ class Client extends AbstractClient
                  */
 
                 if ($item->isChanged()) {
-                    $requestItems[] = [
+                    $data = [
                         'id' => $item->getId(),
-                        'position' => $item->getPosition(),
-                        'status' => $item->getStatus(),
-                        'description' => $item->getDescription(),
                     ];
+
+                    if ($item->isChangedField('position')) {
+                        $data['position'] = $item->getPosition();
+                    }
+
+                    if ($item->isChangedField('status')) {
+                        $data['status'] = $item->getStatus();
+                    }
+
+                    if ($item->isChangedField('description')) {
+                        $data['description'] = $item->getDescription();
+                    }
+
+                    if ($item->isChangedField('is_main') && $item->getIsMain()) {
+                        $data['is_main'] = "true";
+                    }
+                    $requestItems[] = $data;
                 }
             }
             if (empty($requestItems)) {

@@ -56,6 +56,11 @@ class RemotePhotoItem extends AbstractPhotoItem
     private $_comment;
 
     /**
+     * @var bool
+     */
+    private $_isMain;
+
+    /**
      * Создаем объект фотографии на основании данных JSON переданных из API
      * @param array $result
      * @return RemotePhotoItem
@@ -183,31 +188,46 @@ class RemotePhotoItem extends AbstractPhotoItem
         return $this->_comment;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->_id = $id;
         $this->wasChanged();
     }
 
-    public function setPosition($position, $changed = true) {
+    public function setPosition($position, $changed = true)
+    {
         $this->_position = $position;
         if ($changed) {
-            $this->wasChanged();
+            $this->wasChanged('position');
         }
     }
 
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->_status = $status;
-        $this->wasChanged();
+        $this->wasChanged('status');
     }
 
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->_description= $description;
-        $this->wasChanged();
+        $this->wasChanged('description');
     }
 
-    public function prepareForAssertion() {
+    public function prepareForAssertion()
+    {
         $this->_modificatedAt = false;
-        $this->_isChanged = false;
+        $this->flushChanged();
     }
 
+    public function getIsMain()
+    {
+        return $this->_isMain;
+    }
+
+    public function setIsMain()
+    {
+        $this->_isMain = true;
+        $this->wasChanged('is_main');
+    }
 }
