@@ -48,12 +48,9 @@ abstract class AbstractPhotoItem
         return $this->_isChanged;
     }
 
-    public function setError($type, $message)
+    public function setError(array $error)
     {
-        $this->error = [
-            'message' => $message,
-            'type' => $type
-        ];
+        $this->error = $error;
     }
 
     public function getError()

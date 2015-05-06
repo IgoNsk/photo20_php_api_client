@@ -153,7 +153,7 @@ class Client extends AbstractClient
         foreach ($resData['items'] as $index=>$resItem) {
             if (isset($resItem['error'])) {
                 $localItem = $itemsByIndex[$index];
-                $localItem->setError($resItem['error']['type'], $resItem['error']['message']);
+                $localItem->setError($resItem['error']);
                 continue;
             }
 
@@ -214,7 +214,7 @@ class Client extends AbstractClient
             $localItem = $itemsByIndex[$index];
 
             if (!empty($resultSet['error'])) {
-                $localItem->setError($resultSet['error']['type'], $resultSet['error']['message']);
+                $localItem->setError($resultSet['error']);
                 continue;
             }
 
@@ -368,7 +368,7 @@ class Client extends AbstractClient
             if ($resultSet['code'] == 200) {
                 $collection->removeItemByUID($resultSet['id']);
             } else if (!empty($resultSet['error'])) {
-                $collection->getItemByUID($resultSet['id'])->setError($resultSet['error']['type'], $resultSet['error']['message']);
+                $collection->getItemByUID($resultSet['id'])->setError($resultSet['error']);
             }
         }
 
