@@ -53,10 +53,11 @@ class Client extends AbstractClient
      * @param $albumCode
      * @param null $previewSize
      * @param null $status
+     * @param string | null $providerCode
      * @throws \DG\API\Photo\Exception
      * @return PhotoAlbumCollection[]
      */
-    public function get($objectId, $objectType, $albumCode, $previewSize = null, $status = null)
+    public function get($objectId, $objectType, $albumCode, $previewSize = null, $status = null, $providerCode = null)
     {
         $params = $this->extendParams([
             'object_id' => $objectId,
@@ -64,6 +65,7 @@ class Client extends AbstractClient
             'album_code' => $albumCode,
             'preview_size' => $previewSize,
             'status' => $status,
+            'provider_code' => $providerCode,
         ]);
 
         $res = $this->makeRequest('photo/get', $params, self::HTTP_GET);
