@@ -39,7 +39,12 @@ class CurlExecTransport implements TransportInterface
                             $paramName = '--data';
                             break;
                     }
-                    $res[] = $paramName.' '.($prefix ? $prefix.'['.$k.']' : $k).'='."'".str_replace(["'", '\\'], ["\\'", '\\\\'], $v)."'";
+                    if (is_string($v)) {
+                        $v = str_replace(["'", '\\'], ["\\'", '\\\\'], $v);
+                    } elseif (is_bool($v)) {
+                        $v = $v ? 'true' : 'false';
+                    }
+                    $res[] = $paramName.' '.($prefix ? $prefix.'['.$k.']' : $k) . "='$v'";
                 }
             }
 

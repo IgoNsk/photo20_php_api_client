@@ -5,6 +5,7 @@ use DG\API\Photo\Item\LocalPhotoItem;
 use \DG\API\Photo\Item\RemotePhotoItem;
 use \DG\API\Photo\Collection\LocalPhotoCollection;
 use \DG\API\Photo\Collection\PhotoAlbumCollection;
+use DG\API\Photo\Item\OrgSettings as OrgSettings;
 
 class Client extends AbstractClient
 {
@@ -377,4 +378,50 @@ class Client extends AbstractClient
         return $collection;
     }
 
+    /**
+     * @param $orgId
+     * @param OrgSettings $settings
+     * @return bool
+     * @throws ClientException
+     */
+    public function orgUpdate($orgId, Item\OrgSettings $settings)
+    {
+        $params = $this->extendParams([
+            'org_id' => $orgId,
+            'fields' => $settings->getSettings(),
+        ]);
+
+        $res = $this->makeRequest('org/update', $params, self::HTTP_POST);
+
+        if (!empty($res['meta']['code']) && $res['meta']['code'] == 200) {
+            return true;
+        } elseif (!empty($res['error']['type'])) {
+            throw new ClientException($res['error']['type']);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param $orgId
+     * @return bool|OrgSettings
+     */
+    public function orgGet($orgId)
+    {
+        $params = $this->extendParams([
+            'org_id' => $orgId,
+        ]);
+
+        $res = $this->makeRequest('org/get', $params, self::HTTP_GET);
+
+        if (!empty($res['meta']['code']) && $res['meta']['code'] == 200 && !empty($res['result'])) {
+            $orgSettings = new OrgSettings();
+            foreach ($res['result']['providers'] as $provider) {
+                $orgSettings->addProviderConfig($provider['code'], $provider['is_visible']);
+            }
+            return $orgSettings;
+        } else {
+            return false;
+        }
+    }
 }
