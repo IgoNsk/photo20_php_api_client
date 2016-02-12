@@ -379,6 +379,30 @@ class Client extends AbstractClient
     }
 
     /**
+     * @param string $objectId
+     * @param string $objectType
+     * @param array  $previewSize
+     */
+    public function photoCount($objectId, $objectType, array $previewSize = [])
+    {
+        if (is_array($objectId)) {
+            $objectId = implode(',', $objectId);
+        }
+
+        $params = $this->extendParams([
+            'object_type' => $objectType,
+            'object_id' => $objectId,
+            'preview_size' => implode(',', $previewSize),
+        ]);
+
+        $res = $this->makeRequest('photo/count', $params, self::HTTP_GET);
+        $this->checkApiResponse($res);
+
+        $result = $res['result'];
+        return $result;
+    }
+
+    /**
      * @param $orgId
      * @param OrgSettings $settings
      * @return bool
