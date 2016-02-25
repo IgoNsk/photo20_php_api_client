@@ -15,10 +15,12 @@ class Client extends AbstractClient
     const OBJECT_TYPE_BRANCH = 'branch';
     const OBJECT_TYPE_GEO = 'geo';
     const OBJECT_TYPE_ORG = 'org';
+    const OBJECT_TYPE_DISCOUNT = 'discount';
 
     const ALBUM_CODE_COMMON = 'common';
     const ALBUM_CODE_VIEW = 'view';
     const ALBUM_CODE_FACILITIES = 'facilities';
+    const ALBUM_CODE_DISCOUNT = 'discount';
     const ALBUM_CODE_DEFAULT = self::ALBUM_CODE_VIEW;
 
     /**
