@@ -91,7 +91,7 @@ class Client extends AbstractClient
         return $result;
     }
 
-    public function add(LocalPhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null)
+    public function add(LocalPhotoCollection &$collection, $objectType, $objectId, $albumCode, $userId = null, $regionId = null)
     {
         $items = $collection->getItems();
 
@@ -109,13 +109,20 @@ class Client extends AbstractClient
                 'options' => $item->getOptions(),
             ];
         }
-        $params = $this->extendParams([
+        $rawParams = [
             'object_type' => $objectType,
             'object_id' => $objectId,
             'album_code' => $albumCode,
             'user_id' => $userId,
             'items' => $requestItems,
-        ]);
+        ];
+
+        if ($regionId) {
+            $rawParams['region_id'] = $regionId;
+        }
+        $params = $this->extendParams($rawParams);
+
+
 
         $res = $this->makeRequest('photo/add', $params, self::HTTP_POST);
 
