@@ -17,6 +17,7 @@ abstract class AbstractClient
     const LOCALE_EN_US = 'en_US';
 
     protected $_apiKey;
+    protected $_sessionToken;
     protected $_format;
     protected $_locale;
     protected $_onResult;
@@ -54,7 +55,12 @@ abstract class AbstractClient
 
         try
         {
-            $result = $this->transport->makeRequest($methodName, $params, $httpMethod);
+            $headers = [];
+            if (!empty($this->_sessionToken)) {
+                $headers['Auth-Token'] = $this->_sessionToken;
+            }
+
+            $result = $this->transport->makeRequest($methodName, $params, $httpMethod, $headers);
             if (!$result) {
                 $httpCode = 500;
             }
@@ -131,5 +137,17 @@ abstract class AbstractClient
 
     public function setApiKey($apiKey) {
         $this->_apiKey = $apiKey;
+    }
+
+    /**
+     * @param string $token
+     *
+     * @return $this
+     */
+    public function setSessionToken($token)
+    {
+        $this->_sessionToken = $token;
+
+        return $this;
     }
 } 

@@ -17,7 +17,7 @@ class CurlExecTransport implements TransportInterface
         $this->apiUrl = $apiUrl;
     }
 
-    private function getCurlExecString($methodName, array $params = [], $httpMethod = self::HTTP_POST)
+    private function getCurlExecString($methodName, array $params = [], $httpMethod = self::HTTP_POST, array $headers = [])
     {
         $fx = function($fx, $prefix, $ar) use ($httpMethod) {
             $res = [];
@@ -53,6 +53,9 @@ class CurlExecTransport implements TransportInterface
 
         $cmd = '/usr/bin/curl -s -X '.$httpMethod.' \''.$this->apiUrl.$methodName.'\' ';
 
+        foreach ($headers as $headerName=>$headerVal) {
+            $cmd .= ' --header "' . $headerName . ': ' . $headerVal . '"';
+        }
 
         if ($httpMethod == self::HTTP_GET) {
             $cmd .= '--get ';
@@ -64,9 +67,9 @@ class CurlExecTransport implements TransportInterface
         return $cmd;
     }
 
-    public function makeRequest($methodName, array $params, $httpMethod)
+    public function makeRequest($methodName, array $params, $httpMethod, array $headers = [])
     {
-        $cmd = $this->getCurlExecString($methodName, $params, $httpMethod);
+        $cmd = $this->getCurlExecString($methodName, $params, $httpMethod, $headers);
         exec($cmd, $res, $returnCode);
 
         if ($returnCode != 0) {
