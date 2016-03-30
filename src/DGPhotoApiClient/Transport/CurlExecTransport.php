@@ -54,7 +54,7 @@ class CurlExecTransport implements TransportInterface
         $cmd = '/usr/bin/curl -s -X '.$httpMethod.' \''.$this->apiUrl.$methodName.'\' ';
 
         foreach ($headers as $headerName=>$headerVal) {
-            $cmd .= ' --header "' . $headerName . ': ' . $headerVal . '"';
+            $cmd .= '--header "' . $headerName . ': ' . $headerVal . '" ';
         }
 
         if ($httpMethod == self::HTTP_GET) {
